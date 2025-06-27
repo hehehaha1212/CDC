@@ -1,7 +1,7 @@
 import express from 'express';
 //import { validationResult, body } from 'express-validator';
-import { protect } from '../middleware/auth';
-import { register,profile,changepassword,login } from '../controllers/authcontrol';
+import { protect } from '../../middleware/auth';
+import { register,profile,changepassword,login } from '../../controllers/authcontrol';
 
 const router = express.Router();
 //for validation

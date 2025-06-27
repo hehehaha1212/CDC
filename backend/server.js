@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./configs/configs.js";
-import authRoutes from "./routes/authRoutes.js";
+import routes from './routes/index.js'
 
 
 dotenv.config();
@@ -12,26 +12,29 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cors());
 
-const connect = async () => {
+async () => {
   try {
     await connectDB();
-    console.log("MongoDB connection successful");
+    console.log("Mongo connection good");
   } catch (err) {
-    console.error("MongoDB connection failed:", err);
+    console.error("Mongo connection bad", err);
   }
 };
 
-connect();
-app.use('api/home', homeRoutes);
-
+// Use Routes
+app.use('/api', routes);
+//on opening the site
 app.get("/", (req, res) => {
   res.send("API working");
 });
 
+//listens to port for req 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+
+//is any other route
 app.use("*", (req,res) => {
   res.status(404).json({
     success: false,

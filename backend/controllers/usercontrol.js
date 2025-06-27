@@ -321,5 +321,10 @@ export const updateprofile = async (req, res) => {
 			}
 		  });
 	  
+	}catch(error){
+		console.error("cant load dashboard",error);
+		res.status(400).json({
+			message:'idk bhai'
+		});
 	}
   };

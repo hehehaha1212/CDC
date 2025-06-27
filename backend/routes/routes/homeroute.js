@@ -9,4 +9,8 @@ const router =express.Router;
 
 router.get('/event',eventhome);
 
+
+router.get("/feedback",feedback);
+router.get("/contactus",contactus);
+
 export default router;

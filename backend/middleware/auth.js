@@ -34,16 +34,14 @@ export const validate = (req, res, next)=>{
 
 export const profileownsership = async(req, res, next) => {
 	try {
-	  const blog = await member.findById(req.params.id);
+	  const profile = await member.findById(req.params.id);
   
-	  if (!blog) {
-		return res.status(404).json({ message: "Blog not found" });
+	  if (!profile) {
+		return res.status(404).json({ message: "profile not found" });
 	  }
-  
-	  if (blog.author.toString() !== req.member.role.toString()) {
-		return res.status(403).json({ message: "Not authorized" });
-	  }
-  
+	
+	
+	
 	  req.blog = blog;
 	  next();
 	} catch (error) {

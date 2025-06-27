@@ -18,8 +18,9 @@ const upload = multer({
 });
 
 //get user profile
-router.get('api/:id', userprofile);
+router.get('api/user/:id', userprofile);
 
+//get team data 
 router.get('api/team/:id',teamdashboard)
 
 //upload image

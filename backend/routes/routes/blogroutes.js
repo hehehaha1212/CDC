@@ -1,7 +1,7 @@
 import express from 'express';
 import  body from 'express-validator';
-import { checkownership } from '../middleware/auth.js';
-import { protect, validate } from '../middleware/auth.js';
+import { checkownership } from '../../middleware/auth.js';
+import { protect, validate } from '../../middleware/auth.js';
 import {
   createBlog,
   updateBlog,

@@ -1,15 +1,5 @@
 import mongoose from "mongoose";
 
-export const Blog = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  title:        { type: String, required: true },
-  content:      { type: String, required: true },
-  author:       { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
-  images:       [ String], 
-  isPublished:  { type: Boolean, default: false },
-  publishedAt:  { type: Date },
-});
-
 export const user = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   username:       { type: String, unique: true, required: true },
@@ -17,10 +7,15 @@ export const user = new mongoose.Schema({
   password:       { type: String, required: true },
   phone:          { type: Number},
   college:        { type: string},
-  roll_no :       { type: number},
+  rollno :        { type: number},
   isActive:       { type: Boolean, default: true },
-  event_profile:  {
-    team_name:         { type: String },
+  teamname:       { type: String },
+  role:           {
+    type: String,
+    enum: ["user","admin","member"],
+    default: "user"   // All new users are normal users by default
+  },
+  eventprofile:  {
     username:          { type: String },
     codeforceID:       { type: String },
     role:              { type: String, enum: ["member", "leader"], default: "member" }
@@ -29,12 +24,12 @@ export const user = new mongoose.Schema({
 
 export const member = new mongoose.schema ({
   _id:mongoose.Schema.Types.ObjectId,
-  member_name:         { type: String, unique: true, required:true},
-  member_batch:        { type: Number, required:true},
-  member_image:        [ String],
-  member_bio:          { type : string},
-  member_role:         { type :String, required: true},
-  member_social_links: {
+  membername:         { type: String, unique: true, required:true},
+  memberbatch:        { type: Number, required:true},
+  memberimage:        [ String],
+  memberbio:          { type : string},
+  memberrole:         { type :String, required: true},
+  membersocial_links: {
     linkedin:          [ String],
     github:            [ String],
     email:             [ String]
@@ -42,6 +37,7 @@ export const member = new mongoose.schema ({
 });
 
 export const team = new mongoose.schema({
+  _id:mongoose.schema.Types.ObjectId,
   team_name:            { type:string, required:true},
   event:{
     event_id:           { type :number,   required:true},
@@ -63,22 +59,22 @@ export const team = new mongoose.schema({
     Phone:              { type :number, unique:true, required:true},
     Roll_No:            { type: number, unique:true, required:true},
     Codeforces_Id:      { type: string, unique:true, required: true},
-    team_role:          { type:string,  required:true},
+    teamrole:          { type:string,  required:true},
    },
     member3: {
     Name:               { type :string, required:true},
     Email:              { type: string, unique:true, required:true},
     Phone:              { type :number, unique:true, required:true},
-    Roll_No:            { type: number, unique:true, required:true},
-    Codeforces_Id:      { type: string, unique:true, required: true},
-    team_role:          { type:string,  required:true},
+    RollNo:            { type: number, unique:true, required:true},
+    CodeforcesId:      { type: string, unique:true, required: true},
+    teamrole:          { type:string,  required:true},
    }
   },
 
 });
  export const event = new mongoose.schema({
   Year:           { type:number, required:true},
-  Event_Name:     { type:string, required:true},
+  EventName:     { type:string, required:true},
   Description:    { type:string, required:true},
   participants:   { type:number},
   Winners:          [Array], //will hold team name
@@ -95,6 +91,16 @@ export const feedback = new mongoose.schema({
   timestamps:     { 
     createdAt: 'created_at' 
   }
+});
+
+export const Blog = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  title:        { type: String, required: true },
+  content:      { type: String, required: true },
+  author:       { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
+  images:       [ String], 
+  isPublished:  { type: Boolean, default: false },
+  publishedAt:  { type: Date },
 });
 
 /*roadmap{
