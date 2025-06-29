@@ -1,8 +1,8 @@
 //register, login, profile, changepass
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { validationResult } from 'express-validation';
-import User from '../models/models.js';
+import validationResult  from 'express-validation';
+import {User} from '../models/models.js';
 import mongoose from 'mongoose';
 
 //signup, takes minimal data for setup

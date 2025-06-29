@@ -3,7 +3,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import {v2 as cloudinary} from "cloudinary"
-const multer = require('multer');
+import multer from "multer";
 
 dotenv.config();
 //mongo for data storage

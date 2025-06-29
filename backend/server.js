@@ -35,7 +35,7 @@ app.listen(port, () => {
 
 
 //is any other route
-app.use("*", (req,res) => {
+app.use('/{*any}', (req,res) => {
   res.status(404).json({
     success: false,
     message: "Route not found",

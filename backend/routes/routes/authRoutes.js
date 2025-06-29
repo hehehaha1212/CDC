@@ -1,8 +1,11 @@
 import express from 'express';
 //import { validationResult, body } from 'express-validator';
-import { protect } from '../../middleware/auth';
-import { register,profile,changepassword,login } from '../../controllers/authControl';
-
+import { protect } from '../../middleware/auth.js'
+import { 
+    register,
+    changepassword,
+    login } 
+   from '../../controllers/authControl.js'
 const router = express.Router();
 //for validation
 /*const validate = (req, res, next)=>{
@@ -20,7 +23,7 @@ router.post('/login', login);
 
 
 //get user profile
-router.get('/profile', protect, profile);
+//router.get('/profile', protect, profile);
 
 //change password
 router.put('/change-password', protect, changepassword);

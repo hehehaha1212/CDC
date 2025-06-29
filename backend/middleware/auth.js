@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User"; 
-import Blog from "../models/Blog";
+import {User,Blog} from "../models/models.js"; 
 
 export const requireRole = (...roles) => {
 	return (req, res, next) => {

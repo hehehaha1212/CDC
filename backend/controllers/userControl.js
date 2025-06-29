@@ -9,8 +9,7 @@ teamdashboard
 userdashboard
 verify for membership
 */
-import User from "../model/model"
-import Blog from "../model/model"
+import { User, Blog} from '../models/models.js'
 
 
 export const getAllMember = async (req,res)=> {
@@ -26,7 +25,7 @@ try {
     
 };
 
-export const getUserProfile = async(req,req)=>{
+export const getUserProfile = async(req,res)=>{
 	try{
 	const user= await usermodel.findById(req.params.id).select('-password');
 	const blogs = await blogmodel.find({

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const userSchema = new mongoose.Schema({
+export const User = new mongoose.Schema({
   username:       { type: String, required: true },
   email:          { type: String, unique: true, required: true },
   password:       { type: String, required: true },
@@ -15,23 +15,23 @@ export const userSchema = new mongoose.Schema({
   },
   eventProfile:    {
     codeforcesId: { type: String, unique: true, sparse: true },
-    eventRole:    { type: String, enum: ["member", "leader"], default: "member" }
+    eventRole:    { type: String, enum: ["member","leader"], default: "member" }
   }
 }, {
   timestamps: true
 });
 
-export const member = new mongoose.schema ({
-  _id:mongoose.Schema.Types.ObjectId,
-  membername:         { type: String, unique: true, required:true},
-  memberbatch:        { type: Number, required:true},
-  memberimage:        [ String],
-  memberbio:          { type : string},
-  memberrole:         { type :String, required: true},
+export const Member = new mongoose.Schema ({
+  _id: mongoose.Schema.Types.ObjectId,
+  membername:      { type: String, unique: true, required: true },
+  memberbatch:     { type: Number, required: true },
+  memberimage:     [String],
+  memberbio:       { type: String },
+  memberrole:      { type: String, required: true },
   membersocial_links: {
-    linkedin:          [ String],
-    github:            [ String],
-    email:             [ String]
+    linkedin:      [String],
+    github:        [String],
+    email:         [String]
   },
 });
 
@@ -50,13 +50,13 @@ export const Team = new mongoose.Schema({
     },
     role: { 
       type: String, 
-      enum:             ["member", "leader"], 
+      enum: ["member", "leader"], 
       default: "member" 
     },
-    joinedAt:           { type: Date, default: Date.now }
+    joinedAt: { type: Date, default: Date.now }
   }],
-  maxMembers:           { type: Number, default: 3 },
-  createdBy:            { 
+  maxMembers:         { type: Number, default: 3 },
+  createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true 
@@ -65,33 +65,33 @@ export const Team = new mongoose.Schema({
   timestamps: true
 });
 
- export const event = new mongoose.schema({
-  Year:           { type:number, required:true},
-  EventName:     { type:string, required:true},
-  Description:    { type:string, required:true},
-  participants:   { type:number},
-  Winners:          [Array], //will hold team name
-  About:{
-    //things
-  }
+export const Event = new mongoose.Schema({
+  Year:         { type: Number, required: true },
+  EventName:    { type: String, required: true },
+  Description:  { type: String, required: true },
+  participants: { type: Number },
+  Winners:      [{ type: mongoose.Schema.Types.ObjectId }]
+}, {
+  timestamps: true
 });
 
-export const feedback = new mongoose.schema({
-  name:           { type:string, required:true},
-  email:          { type:string, required:true},
-  contact:        { type:number, required:true},
-  content :       { type:string, required:true},
+export const Feedback = new mongoose.Schema({
+  name:    { type: String, required: true },
+  email:   { type: String, required: true },
+  contact: { type: Number, required: true },
+  content: { type: String, required: true }
+}, {
   timestamps: true
 });
 
 export const Blog = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  title:        { type: String, required: true },
-  content:      { type: String, required: true },
-  author:       { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
-  images:       [ String], 
-  isPublished:  { type: Boolean, default: false },
-  publishedAt:  { type: Date },
+  _id:         mongoose.Schema.Types.ObjectId,
+  title:       { type: String, required: true },
+  content:     { type: String, required: true },
+  author:      { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
+  images:      [String], 
+  isPublished: { type: Boolean, default: false },
+  publishedAt: { type: Date }
 });
 
 /*roadmap{
