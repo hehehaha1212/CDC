@@ -1,9 +1,21 @@
-import usermodel from "../model/model"
-import blogmodel from "../model/model"
+/*
+get all members
+get user profile
+update profile
+upload profile image??
+get all blogs 
+delete user
+teamdashboard
+userdashboard
+verify for membership
+*/
+import User from "../model/model"
+import Blog from "../model/model"
+
 
 export const getAllMember = async (req,res)=> {
 try {
-	const users= await  usermodel.find({isactive:true})
+	const users= await  User.find({isactive:true})
 	.select('=password -email')
 	.sort({'profile.name':1});
 	res.json(users); 
@@ -30,70 +42,13 @@ export const getUserProfile = async(req,req)=>{
 	}
 };
 
-//create blog
-router.post('/', [
-    protect,
-    body('title').trim().islength({ min: 3, max: 50 }).withMessage("title length btwn 3 t 50 chars"),
-    body('content').trim().islength({ min: 1 }).withMessage('content is required'),
-    body('isPublished').optional().isBoolean().withMessage('ispublishedmustbebool'),
-], async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Validation failed',
-            });
-        }
-
-        const { title, content, isPublished = false } = req.body;
-
-        const blog = new Blog({
-            title,
-            content,
-            author: req.user.id,
-            isPublished,
-            publishedAt: isPublished ? new Date() : null,
-            views: 0,
-            likes: []
-        });
-
-        await blog.save();
-
-        await blog.populate('author', 'username profile.firstName profile.lastName profile.profileImage');
-
-        res.status(201).json({
-            success: true,
-            message: 'Blog created successfully',
-            data: blog
-        });
-    } catch (error) {
-
-        console.error('Create blog error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
-    }
-});
-
 //upload profile
 export const updateprofile = async (req, res) => {
 	try {
-	  // Check validation errors
-	  const errors = validationResult(req);
-	  if (!errors.isEmpty()) {
-		return res.status(400).json({
-		  success: false,
-		  message: 'Validation failed',
-		  errors: errors.array()
-		});
-	  }
-  
+
 	  const { id } = req.params;
-  
 	  // Check if user is updating their own profile
-	  if (req.user.id !== id) {
+	  if (req.user._id !== id) {
 		return res.status(403).json({
 		  success: false,
 		  message: 'Not authorized to update this profile'
@@ -302,29 +257,50 @@ export const updateprofile = async (req, res) => {
   export const teamdashboard =  async (req,res)=>{
 	try{
 		const id= req.params;
-		const team= await team.findById(id);
+		const user= await user.findById(id);
+		const teamid = user.teamID;
+		const team= await team.findById(teamid);
 		if(team==null){
 			return res.status(400).json({
 				message:error
 			});
 		}
-		res.json
-
 		res.json({
 			success: true,
-			data: blogs,
-			pagination: {
-			  page: parseInt(page),
-			  limit: parseInt(limit),
-			  total,
-			  pages: Math.ceil(total / limit)
-			}
+			data:team,
 		  });
-	  
 	}catch(error){
 		console.error("cant load dashboard",error);
 		res.status(400).json({
 			message:'idk bhai'
 		});
+	}
+  };
+
+  export const userDashboard = async(req,res)=>{
+	try{
+		const id= req.params;
+		const  profile =await user.findById(id);
+		if(profile==null){
+			return res.status(404).json({
+				message:'error getting user data'
+			});
+		}
+		const {username, email,phone,college,rollno,teamname}=profile;
+		res.json({
+			success:true,
+			username,    
+			email,            
+			phone,     
+			college,       
+			rollno ,       
+			teamname,
+		});
+
+	}catch(error){
+		console.error(error);
+		res.status(400).json({
+			message:'error getting user data'
+		})
 	}
   };

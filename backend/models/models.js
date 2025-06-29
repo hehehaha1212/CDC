@@ -1,25 +1,24 @@
 import mongoose from "mongoose";
 
-export const user = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  username:       { type: String, unique: true, required: true },
+export const userSchema = new mongoose.Schema({
+  username:       { type: String, required: true },
   email:          { type: String, unique: true, required: true },
   password:       { type: String, required: true },
-  phone:          { type: Number},
-  college:        { type: string},
-  rollno :        { type: number},
+  phone:          { type: Number, unique: true },
+  college:        { type: String },
+  rollno:         { type: Number, unique: true },
   isActive:       { type: Boolean, default: true },
-  teamname:       { type: String },
-  role:           {
+  role: {
     type: String,
-    enum: ["user","admin","member"],
-    default: "user"   // All new users are normal users by default
+    enum: ["user", "admin", "member"],
+    default: "user"
   },
-  eventprofile:  {
-    username:          { type: String },
-    codeforceID:       { type: String },
-    role:              { type: String, enum: ["member", "leader"], default: "member" }
+  eventProfile:    {
+    codeforcesId: { type: String, unique: true, sparse: true },
+    eventRole:    { type: String, enum: ["member", "leader"], default: "member" }
   }
+}, {
+  timestamps: true
 });
 
 export const member = new mongoose.schema ({
@@ -36,42 +35,36 @@ export const member = new mongoose.schema ({
   },
 });
 
-export const team = new mongoose.schema({
-  _id:mongoose.schema.Types.ObjectId,
-  team_name:            { type:string, required:true},
-  event:{
-    event_id:           { type :number,   required:true},
-    registeration:      { type : Boolean, required:true},
-    score:              { type :number,   required:true}
+export const Team = new mongoose.Schema({
+  teamName:           { type: String, required: true },
+  event: {
+    eventId:          { type: Number, required: true },
+    isRegistered:     { type: Boolean, default: false },
+    score:            { type: Number, default: 0 }
   },
-  member:{
-    member1: {
-    Name:               { type :string, required:true},
-    Email:              { type: string, unique:true, required:true},
-    Phone:              { type :number, unique:true, required:true},
-    Roll_No:            { type: number, unique:true, required:true},
-    Codeforces_Id:      { type: string, unique:true, required: true},
-    team_role:          { type:string,  required:true},
-   },
-    member2: {
-    Name:               { type :string, required:true},
-    Email:              { type: string, unique:true, required:true},
-    Phone:              { type :number, unique:true, required:true},
-    Roll_No:            { type: number, unique:true, required:true},
-    Codeforces_Id:      { type: string, unique:true, required: true},
-    teamrole:          { type:string,  required:true},
-   },
-    member3: {
-    Name:               { type :string, required:true},
-    Email:              { type: string, unique:true, required:true},
-    Phone:              { type :number, unique:true, required:true},
-    RollNo:            { type: number, unique:true, required:true},
-    CodeforcesId:      { type: string, unique:true, required: true},
-    teamrole:          { type:string,  required:true},
-   }
-  },
-
+  members: [{
+    userId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User', 
+      required: true 
+    },
+    role: { 
+      type: String, 
+      enum:             ["member", "leader"], 
+      default: "member" 
+    },
+    joinedAt:           { type: Date, default: Date.now }
+  }],
+  maxMembers:           { type: Number, default: 3 },
+  createdBy:            { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  }
+}, {
+  timestamps: true
 });
+
  export const event = new mongoose.schema({
   Year:           { type:number, required:true},
   EventName:     { type:string, required:true},
@@ -88,9 +81,7 @@ export const feedback = new mongoose.schema({
   email:          { type:string, required:true},
   contact:        { type:number, required:true},
   content :       { type:string, required:true},
-  timestamps:     { 
-    createdAt: 'created_at' 
-  }
+  timestamps: true
 });
 
 export const Blog = new mongoose.Schema({

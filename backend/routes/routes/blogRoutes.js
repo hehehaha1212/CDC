@@ -12,19 +12,16 @@ import {
 
 const router = express.Router();
 
-//create blog
-//owner/admin
+//owner
+router.post('/',protect,checkownership,createBlog);
 
-router.post('/',
-  protect,checkownership,createBlog);
-
-//updateblog
 //owner/admin
 router.put('/:id', protect, checkownership, updateBlog);
 
-//delte
 //owner/admin
 router.delete('/:id/delete', protect, checkownership, deleteBlog);
+
+//all
 router.get('/:id', getBlogById);
 router.get('/', getAllBlogs);
 

@@ -3,19 +3,17 @@ import userRoutes from './routes/userroutes.js';
 import homeRoutes from './routes/homeroute.js';
 import blogRoutes from './routes/blogroutes.js';
 import authRoutes from './routes/authroutes.js';
-
+import adminRoutes from './routes/adminroutes.js'
 const router = express.Router();
 
-// User routes
 router.use('/user', userRoutes);
 
-// Home routes
 router.use('/home', homeRoutes);
 
-// Blog routes
 router.use('/blog', blogRoutes);
 
-// Auth routes
 router.use('/auth', authRoutes);
+
+router.use('/admin', adminRoutes);
 
 export default router;

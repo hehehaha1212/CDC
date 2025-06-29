@@ -1,6 +1,8 @@
 //imports
-import router from express.Router
+import express from 'express';
 import multer from 'multer';
+
+const router= express.Router;
 
 //memory storage config for multer, to be done before cloudinary upload
 const upload = multer({

@@ -1,9 +1,18 @@
-import jwt from "jwt"
-import user from "../models/models"
-import blog from "../models/models.js"; 
-import validationResult from "validation"
-import { member } from "../models/models";
- 
+import jwt from "jsonwebtoken";
+import User from "../models/User"; 
+import Blog from "../models/Blog";
+
+export const requireRole = (...roles) => {
+	return (req, res, next) => {
+		if (!req.User || !roles.includes(req.User.role)) {
+			return res.status(403).json({ message: `Access denied: Requires role(s): ${roles.join(", ")}` });
+		}
+		next();
+	};
+};
+
+
+
 export const protect = async (req, res, next) => {
 	let token;
 	if (req.headers.authorization && req.headers.authorization.startWith('bearer')) {
@@ -15,7 +24,7 @@ export const protect = async (req, res, next) => {
 
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		req.user = await user.findById(decoded.id).select('-password');
+		const user = await User.findById(decoded.id).select('-password');
 		next();
 	}
 	catch (err) {
@@ -23,50 +32,29 @@ export const protect = async (req, res, next) => {
 	}
 };
 
-
-export const validate = (req, res, next)=>{
-	const error = validationResult(req);
+/* used to input validation
+export const validate = (req, res, next , error)=>{
 	if(!error.isEmpty()){
 		return res.status(400).json({errors:error.array()});
 	}
 	next();
 };
-
-export const profileownsership = async(req, res, next) => {
-	try {
-	  const profile = await member.findById(req.params.id);
-  
-	  if (!profile) {
-		return res.status(404).json({ message: "profile not found" });
-	  }
-	
-	
-	
-	  req.blog = blog;
-	  next();
-	} catch (error) {
-	  return res.status(500).json({ message: "Server error" });
-	}i
-  };
-
-
-
+*/
 
 export const blogownership = async (req, res, next) => {
   try {
-	const blog = await blog.findById(req.params.id);
+	const id = req.params(id)
+	const blog = await Blog.findById(req.params.id);
 
 	if (!blog) {
 	  return res.status(404).json({ message: "Blog not found" });
 	}
 
-	if (blog.author.toString() !== req.member.role.toString()) {
+	if (blog.author.toString() !== req._id.toString()) {
 	  return res.status(403).json({ message: "Not authorized" });
 	}
-
-	req.blog = blog;
 	next();
-  } catch (error) {
+     }catch (error) {
 	return res.status(500).json({ message: "Server error" });
-  }i
+  }
 };

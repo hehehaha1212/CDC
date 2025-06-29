@@ -17,12 +17,21 @@ export const connectDB = async () => {
   }
 };
 //cloudinary for image uploads
-export const connectCloudinary = async () => {
+const connectCloudinary = async () => {
   cloudinary.config({
     cloud_name:process.env.CLOUD_NAME,
     api_key:process.env.API_KEY,
     api_secret:process.env.API_SECRET
   })
+};
+
+export const uploadToCloudinary = async (Path, folder)=>{
+  try{
+    const data= await cloudinary.uploader.upload(Path,{folder:folder});
+    return{url:data.secure_url,publicID:data.public_id};
+  }catch(error){
+    console.error("failed to upload",error);
+  }
 };
 
 //export const connectFirebase = () => {
