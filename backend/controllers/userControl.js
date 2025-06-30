@@ -9,20 +9,18 @@ teamdashboard
 userdashboard
 verify for membership
 */
-import { User, Blog} from '../models/models.js'
+import { User, Blog, Team } from '../models/models.js';
 
-
-export const getAllMember = async (req,res)=> {
-try {
-	const users= await  User.find({isactive:true})
-	.select('=password -email')
-	.sort({'profile.name':1});
-	res.json(users); 
-	}
-	catch(error){
-	res.status(500).json({message:'server error'});	
-	}
-    
+// Get all members
+export const getAllMember = async (req, res) => {
+  try {
+    const users = await User.find({ isActive: true })
+      .select('-password -email')
+      .sort({ username: 1 });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'server error' });
+  }
 };
 
 export const getUserProfile = async(req,res)=>{
@@ -42,7 +40,7 @@ export const getUserProfile = async(req,res)=>{
 };
 
 //upload profile
-export const updateprofile = async (req, res) => {
+export const updateProfile = async (req, res) => {
 	try {
 
 	  const { id } = req.params;
@@ -102,7 +100,7 @@ export const updateprofile = async (req, res) => {
   };
 
   //upload profile pic
-  export const uploadprofileimage = async (req, res) => {
+  export const uploadProfileImage = async (req, res) => {
 	try {
 	  const { id } = req.params;
   
@@ -163,7 +161,7 @@ export const updateprofile = async (req, res) => {
   }
 
   //get blogs by user
-  export const getuserblogs = async (req, res) => {
+  export const getUserBlogs = async (req, res) => {
 	try {
 	  const { id } = req.params;
 	  const { page = 1, limit = 10, status = 'published' } = req.query;
@@ -213,7 +211,7 @@ export const updateprofile = async (req, res) => {
   };
 
 //deletes user data
-  export const deleteuserblog = async (req, res) => {
+  export const deleteUserBlog = async (req, res) => {
 	try {
 	  const { id } = req.params;
   
@@ -253,53 +251,41 @@ export const updateprofile = async (req, res) => {
 	}
   };
 
-  export const teamdashboard =  async (req,res)=>{
-	try{
-		const id= req.params;
-		const user= await user.findById(id);
-		const teamid = user.teamID;
-		const team= await team.findById(teamid);
-		if(team==null){
-			return res.status(400).json({
-				message:error
-			});
-		}
-		res.json({
-			success: true,
-			data:team,
-		  });
-	}catch(error){
-		console.error("cant load dashboard",error);
-		res.status(400).json({
-			message:'idk bhai'
-		});
-	}
-  };
+  // Team dashboard
+export const teamDashboard = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user || !user.teamID) {
+      return res.status(404).json({ message: 'User or team not found' });
+    }
+    const team = await Team.findById(user.teamID);
+    if (!team) {
+      return res.status(404).json({ message: 'Team not found' });
+    }
+    res.json({ success: true, data: team });
+  } catch (error) {
+    res.status(400).json({ message: 'Error loading dashboard' });
+  }
+};
 
-  export const userDashboard = async(req,res)=>{
-	try{
-		const id= req.params;
-		const  profile =await user.findById(id);
-		if(profile==null){
-			return res.status(404).json({
-				message:'error getting user data'
-			});
-		}
-		const {username, email,phone,college,rollno,teamname}=profile;
-		res.json({
-			success:true,
-			username,    
-			email,            
-			phone,     
-			college,       
-			rollno ,       
-			teamname,
-		});
-
-	}catch(error){
-		console.error(error);
-		res.status(400).json({
-			message:'error getting user data'
-		})
-	}
-  };
+// User dashboard
+export const userDashboard = async (req, res) => {
+  try {
+    const profile = await User.findById(req.params.id).select('-password');
+    if (!profile) {
+      return res.status(404).json({ message: 'error getting user data' });
+    }
+    const { username, email, phone, college, rollno, teamname } = profile;
+    res.json({
+      success: true,
+      username,
+      email,
+      phone,
+      college,
+      rollno,
+      teamname,
+    });
+  } catch (error) {
+    res.status(400).json({ message: 'error getting user data' });
+  }
+};

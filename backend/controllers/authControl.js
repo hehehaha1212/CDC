@@ -3,55 +3,47 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import validationResult  from 'express-validation';
 import {User} from '../models/models.js';
-import mongoose from 'mongoose';
 
 //signup, takes minimal data for setup
 export const register = async (req, res) => {
     try {
-        const error = validationResult(req);
-        if (!error.isEmpty()) {
-            return res.status(400).json({
-                massage: "validation error",
-                error: error.array()
-            })
-        }
+        const { username, email, password } = req.body;
 
-        const { email, password, username } = req.body;
-
-        const existinguser = await User.findOne({$or: [{ email },{ username }]});
-
+        // Input validation
+    if (username.split(' ').length < 2 || username.split(' ')[0].length < 2) {
+      return res.status(400).send('First name should be at least 2 characters long');
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).send('Invalid email format');
+    }
+    if (password.length < 8) {
+      return res.status(400).send('Password should be at least 8 characters long');
+    }
+    
+        const existinguser = await User.findOne({ email });
         if (existinguser) {
             return res.status(400).json(
                 {
                     message: "user already exists"
                 })
         };
-
         const salt = await bcrypt.genSalt(10);
         const hashedpassword = await bcrypt.hash(password, salt);
 
         const user = new User({
-            username:username,
-            email:email,
+            username,
+            email,
             password: hashedpassword,
             isActive: true,
             role:user,
         });
-        //generate jwt token for logins
-        const token = jwt.sign(
-            { id: user._id,
-              role:user.role,
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: '4D' }
-        );
+
         res.status(200).json({
             success: true,
             message: "user created",
-            email: user.email,
-            token
         });
-    } catch (error) {
+
+    }catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({
             success: false,
@@ -62,24 +54,16 @@ export const register = async (req, res) => {
 
 export const login = async (req, res, next) => {
     try {
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                message: 'Validation failed',
-                errors: errors.array()
-            });
-        }
         const { email, password, username } = req.body;
 
         // Find user by email
-        const user = await User.findOne({$or:[ {email},{username}]}).select('+password');
+        const user = await User.findOne({$or:[ {email},{username}]});
         if (!user) {
             return res.status(401).json({
                 message: 'Invalid credentials'
             });
         }
-
+        
         // Check if user is active
         if (!user.isActive) {
             return res.status(401).json({

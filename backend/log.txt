@@ -68,3 +68,6 @@ will be making other routes so it start making sense
 
 24th june
 fixing inconsistancy
+
+30th,
+will merge user and auths, 

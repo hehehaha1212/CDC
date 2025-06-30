@@ -8,6 +8,7 @@ export const User = new mongoose.Schema({
   college:        { type: String },
   rollno:         { type: Number, unique: true },
   isActive:       { type: Boolean, default: true },
+  teadID:         {type: mongoose.Schema.Types.ObjectId},
   role: {
     type: String,
     enum: ["user", "admin", "member"],
@@ -22,13 +23,12 @@ export const User = new mongoose.Schema({
 });
 
 export const Member = new mongoose.Schema ({
-  _id: mongoose.Schema.Types.ObjectId,
-  membername:      { type: String, unique: true, required: true },
-  memberbatch:     { type: Number, required: true },
-  memberimage:     [String],
-  memberbio:       { type: String },
-  memberrole:      { type: String, required: true },
-  membersocial_links: {
+  memberName:      { type: String, unique: true, required: true },
+  memberBatch:     { type: Number, required: true },
+  memberImage:     [String],
+  memberBio:       { type: String },
+  memberRole:      { type: String, required: true },
+  memberSocial: {
     linkedin:      [String],
     github:        [String],
     email:         [String]
@@ -55,17 +55,12 @@ export const Team = new mongoose.Schema({
     },
     joinedAt: { type: Date, default: Date.now }
   }],
-  maxMembers:         { type: Number, default: 3 },
-  createdBy: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
-  }
+  maxMembers: { type: Number, default: 3 },
 }, {
   timestamps: true
 });
 
-export const Event = new mongoose.Schema({
+/*export const Event = new mongoose.Schema({
   Year:         { type: Number, required: true },
   EventName:    { type: String, required: true },
   Description:  { type: String, required: true },
@@ -74,6 +69,7 @@ export const Event = new mongoose.Schema({
 }, {
   timestamps: true
 });
+*/
 
 export const Feedback = new mongoose.Schema({
   name:    { type: String, required: true },
@@ -85,7 +81,6 @@ export const Feedback = new mongoose.Schema({
 });
 
 export const Blog = new mongoose.Schema({
-  _id:         mongoose.Schema.Types.ObjectId,
   title:       { type: String, required: true },
   content:     { type: String, required: true },
   author:      { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 

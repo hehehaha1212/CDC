@@ -1,11 +1,11 @@
 import express from 'express';
 //import { validationResult, body } from 'express-validator';
-import { protect } from '../../middleware/auth.js'
+import { protect } from '../middleware/auth.js'
 import { 
     register,
     changepassword,
     login } 
-   from '../../controllers/authControl.js'
+   from '../controllers/authControl.js'
 const router = express.Router();
 //for validation
 /*const validate = (req, res, next)=>{
@@ -14,6 +14,12 @@ const router = express.Router();
         return res.status(400).json({errors:error.array()});
     }next();
 };*/
+
+
+
+router.get('/', (req, res) => {
+  res.send('auth base route working');
+});
 
 //user registers as member or admin
 router.post('/register',  register);
@@ -28,4 +34,6 @@ router.post('/login', login);
 //change password
 router.put('/change-password', protect, changepassword);
 
-export default router;
+
+const authRouter= router;
+export default authRouter;
