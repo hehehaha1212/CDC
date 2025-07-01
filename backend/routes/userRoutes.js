@@ -1,22 +1,18 @@
-/**
+/*
+ a;; the things a user can do, before and after login
+ (*)-login required
  get all member
- userdashboard
- updateprofile
- teamdashboard
- uploadprofileimage
- get userblog
- deleteuserblog
- 
+ *userdashboard
+ *updateprofile
+ *teamdashboard
 */
 
 //imports
 import express from 'express';
 import multer from 'multer';
 import {
-  deleteUserBlog,
-  getUserBlogs,
+  deactivateUser,
   teamDashboard,
-  uploadProfileImage,
   userDashboard,
   updateProfile,
   getAllMember,
@@ -26,7 +22,7 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// memory storage config for multer, to be done before cloudinary upload
+/*
 const upload = multer({
   storage: multer.memoryStorage(), // fixed typo
   limits: {
@@ -41,7 +37,7 @@ const upload = multer({
     }
   }
 });
-
+*/
 router.get('/', (req, res) => {
   res.send('User base route working');
 });
@@ -55,16 +51,18 @@ router.get('/:id', userDashboard);
 // Update user profile
 router.put('/:id', protect, updateProfile);
 
-// Get team data
+//maybe team should have its own saparate routes,
+//like delete member, add member, change teamname,maybe maybe
+
+// Get  their current team data
 router.get('/team/:id', teamDashboard);
 
-// Upload image
-router.post('/:id/upload-avatar', protect, upload.single('avatar'), uploadProfileImage);
+//make changes in their team,
+router.put('/team/:id',updateteam)
 
-// Get user blogs
-router.get('/:id/blogs', getUserBlogs);
+// maybe in home route
+router.post('/feedback',feedback)
 
-// Delete user
-router.delete('/:id', protect,deleteUserBlog);
+router.delete('/:id', protect, deactivateUser)
 
 export default router;

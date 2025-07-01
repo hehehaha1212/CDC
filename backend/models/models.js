@@ -8,7 +8,7 @@ export const User = new mongoose.Schema({
   college:        { type: String },
   rollno:         { type: Number, unique: true },
   isActive:       { type: Boolean, default: true },
-  teadID:         {type: mongoose.Schema.Types.ObjectId},
+  teadID:         { type: mongoose.Schema.Types.ObjectId},
   role: {
     type: String,
     enum: ["user", "admin", "member"],
@@ -37,30 +37,23 @@ export const Member = new mongoose.Schema ({
 
 export const Team = new mongoose.Schema({
   teamName:           { type: String, required: true },
+  maxMembers: { type: Number, default: 3 },
   event: {
     eventId:          { type: Number, required: true },
     isRegistered:     { type: Boolean, default: false },
     score:            { type: Number, default: 0 }
   },
   members: [{
-    userId: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User', 
-      required: true 
-    },
-    role: { 
-      type: String, 
-      enum: ["member", "leader"], 
-      default: "member" 
-    },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User',  required: true },
+    role:   { type: String, enum: ["member", "leader"], default: "member" },
     joinedAt: { type: Date, default: Date.now }
   }],
-  maxMembers: { type: Number, default: 3 },
 }, {
   timestamps: true
 });
 
-/*export const Event = new mongoose.Schema({
+/*
+export const Event = new mongoose.Schema({
   Year:         { type: Number, required: true },
   EventName:    { type: String, required: true },
   Description:  { type: String, required: true },

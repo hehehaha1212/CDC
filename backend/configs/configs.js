@@ -39,6 +39,7 @@ export const uploadToCloudinary = async (Path, folder)=>{
 //  console.log("Firebase connection logic goes here");
 //};
 
+//will be used with form input for images and things
 export const upload = multer({
     storage: multer.memoryStorage(),
     limit: { fileSize: 1024 * 1024 * 10 },

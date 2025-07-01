@@ -211,7 +211,7 @@ export const updateProfile = async (req, res) => {
   };
 
 //deletes user data
-  export const deleteUserBlog = async (req, res) => {
+  export const deactivateUser = async (req, res) => {
 	try {
 	  const { id } = req.params;
   

@@ -4,13 +4,11 @@ import {User,Blog} from "../models/models.js";
 export const requireRole = (...roles) => {
 	return (req, res, next) => {
 		if (!req.User || !roles.includes(req.User.role)) {
-			return res.status(403).json({ message: `Access denied: Requires role(s): ${roles.join(", ")}` });
+			return res.status(403).json({ message: `Access denied`});
 		}
 		next();
 	};
 };
-
-
 
 export const protect = async (req, res, next) => {
 	let token;
@@ -23,11 +21,11 @@ export const protect = async (req, res, next) => {
 
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		const user = await User.findById(decoded.id).select('-password');
-		next();
+		req.user = verified;
+    	next();
 	}
 	catch (err) {
-		return res.status(401).json({ message: 'not authorized' });
+		return res.status(401).json({ message: 'invalid token' });
 	}
 };
 

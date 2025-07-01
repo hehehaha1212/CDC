@@ -71,3 +71,5 @@ fixing inconsistancy
 
 30th,
 will merge user and auths, 
+
+we can add icons to be added in user dashboard??

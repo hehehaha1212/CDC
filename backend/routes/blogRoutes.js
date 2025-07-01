@@ -1,5 +1,3 @@
-
-
 import express from 'express';
 import { blogownership, protect } from '../middleware/auth.js';
 import {
@@ -31,6 +29,9 @@ router.get('/:id', getBlogById);
 
 // Get blogs by user (public)
 router.get('/user/:userId', getBlogsByUser);
+
+// Delete user
+router.delete('/:id', protect,deleteBlog);
 
 export default router;
 

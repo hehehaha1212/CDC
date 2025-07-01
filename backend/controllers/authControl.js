@@ -63,7 +63,7 @@ export const login = async (req, res, next) => {
                 message: 'Invalid credentials'
             });
         }
-        
+
         // Check if user is active
         if (!user.isActive) {
             return res.status(401).json({
@@ -96,7 +96,6 @@ export const login = async (req, res, next) => {
                 username: user.username,
                 email: user.email,
                 phone:user.phone,
-                teamname:user.teamname
             }
         });
     } catch (error) {
@@ -109,12 +108,7 @@ export const login = async (req, res, next) => {
 
 export const changepassword = async (req, res, next) => {
     try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                message: 'Validation failed',
-            });
-        }
+
         const { username, currentPassword, newPassword } = req.body;
 
         // Get user with password
@@ -128,7 +122,7 @@ export const changepassword = async (req, res, next) => {
                 message: 'invalid creds'
             });
         }
-
+        
         // Hash new password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);

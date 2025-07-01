@@ -2,15 +2,17 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./configs/configs.js";
-//import homeRouter from "./routes/homeRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import blogRouter from "./routes/blogRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import eventRouter from "./routes/eventRoutes.js";
+import resourceRouter from "./routes/resourceRoutes.js";
+import teamRouter from  "./routes/teamRouter.js";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
-
+r
 app.use(express.json());
 app.use(cors());
 
@@ -24,10 +26,12 @@ async () => {
   }
 };
 
-//app.use('/home',homeRouter);
 app.use('/user', userRouter);
 app.use('/blog', blogRouter);
 app.use('/auth', authRouter);
+app.use('/event', eventRouter);
+app.use('/resource',resourceRouter);
+app.use('/team',teamRouter);
 
 
 app.get("/", (req, res) => {
