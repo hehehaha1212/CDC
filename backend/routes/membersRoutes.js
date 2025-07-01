@@ -4,8 +4,6 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
-  getBlogById,
-  getBlogsByUser
 } from '../controllers/blogControl.js';
 
 const router = express.Router();
