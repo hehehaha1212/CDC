@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./configs/configs.js";
 import userRouter from "./routes/userRoutes.js";
-import blogRouter from "./routes/blogRoutes.js";
+import membersRouter from "./routes/membersRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import eventRouter from "./routes/eventRoutes.js";
 import resourceRouter from "./routes/resourceRoutes.js";
@@ -27,7 +27,7 @@ async () => {
 };
 
 app.use('/user', userRouter);
-app.use('/blog', blogRouter);
+app.use('/members', membersRouter);
 app.use('/auth', authRouter);
 app.use('/event', eventRouter);
 app.use('/resource',resourceRouter);

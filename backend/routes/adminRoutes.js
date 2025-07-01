@@ -1,5 +1,3 @@
-//all routes for admin
-
 import express from 'express'
 import { protect, requireRole } from '../middleware/auth';
 

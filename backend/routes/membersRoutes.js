@@ -15,23 +15,20 @@ router.get('/', (req, res) => {
   res.send('blog base route working');
 });
 
+//get member data and their blogs, maybe break these into two
+router.get('/:memberID',getMember)
+
 // Create blog (protected)
-router.post('/', protect, createBlog);
+router.post('/:memberID', protect, createBlog);
+
+// Get blog by user (public)
+router.get('/:memberID/:blogID', getBlog);
 
 // Update blog (protected, ownership)
-router.put('/:id', protect, blogownership, updateBlog);
+router.put('/:memberID/:blogID', protect, blogownership, updateBlog);
 
 // Delete blog (protected, ownership)
-router.delete('/:id', protect, blogownership, deleteBlog);
-
-// Get blog by id (public)
-router.get('/:id', getBlogById);
-
-// Get blogs by user (public)
-router.get('/user/:userId', getBlogsByUser);
-
-// Delete user
-router.delete('/:id', protect,deleteBlog);
+router.delete('/:memberID/:blogID', protect, blogownership, deleteBlog);
 
 export default router;
 

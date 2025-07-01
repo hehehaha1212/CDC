@@ -1,13 +1,3 @@
-/*
-all authentication related routes
-user signin- db entry,
-login- they get token with role and their id
-forget password-confirms identity thourgh mailed otp
-change password- confirms using old password
-*/
-
-
-/* pura change kar lene */
 import express from 'express';
 import { protect } from '../middleware/auth.js'
 import { 
