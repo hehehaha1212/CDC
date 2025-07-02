@@ -43,9 +43,9 @@ We host events, coding challenges, and collaborative projects to build a stronge
 
 ## Contact Us
 
-Have suggestions or want to join the club?  
-📧 Email us at:
-🔗 Follow us on: [Instagram](#) | [LinkedIn](#) | [GitHub](#)
+Have suggestions?
+Email us at:
+Follow us on: [Instagram](#) | [LinkedIn](#) | [GitHub](#)
 
 ---
 
