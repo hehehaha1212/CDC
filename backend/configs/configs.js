@@ -6,23 +6,33 @@ import {v2 as cloudinary} from "cloudinary"
 import multer from "multer";
 
 dotenv.config();
-//mongo for data storage
+
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 export const connectDB = async () => {
-  mongoose.connection.on("connected");
   try {
-    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connection.on('connected', () => {
+      console.log('MongoDB connected');
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+    });
+
+    await mongoose.connect(process.env.MONGODB_URI);
+
     console.log("Connected to MongoDB successfully");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
   }
 };
+
 //cloudinary for image uploads
-const connectCloudinary = async () => {
+export const connectCloudinary = async () => {
   cloudinary.config({
     cloud_name:process.env.CLOUD_NAME,
     api_key:process.env.API_KEY,
     api_secret:process.env.API_SECRET
-  })
+  });
 };
 
 export const uploadToCloudinary = async (Path, folder)=>{

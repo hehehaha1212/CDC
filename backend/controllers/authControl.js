@@ -1,77 +1,73 @@
 //register, login, profile, changepass
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import validationResult  from 'express-validation';
 import {User} from '../models/models.js';
 
-//signup, takes minimal data for setup
 export const register = async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
+  try {
+    const { username, email, password } = req.body;
 
-        // Input validation
-    if (username.split(' ').length < 2 || username.split(' ')[0].length < 2) {
-      return res.status(400).send('First name should be at least 2 characters long');
+    if (!username || username.trim().length < 2 || username.split(' ')[0].length < 2) {
+      return res.status(400).json({ message: 'First name should be at least 2 characters long' });
     }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return res.status(400).send('Invalid email format');
-    }
-    if (password.length < 8) {
-      return res.status(400).send('Password should be at least 8 characters long');
-    }
-    
-        const existinguser = await User.findOne({ email });
-        if (existinguser) {
-            return res.status(400).json(
-                {
-                    message: "user already exists"
-                })
-        };
-        const salt = await bcrypt.genSalt(10);
-        const hashedpassword = await bcrypt.hash(password, salt);
 
-        const user = new User({
-            username,
-            email,
-            password: hashedpassword,
-            isActive: true,
-            role:user,
-        });
-
-        res.status(200).json({
-            success: true,
-            message: "user created",
-        });
-
-    }catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error during registration'
-        });
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
     }
-}
+
+    if (!password || password.length < 8) {
+      return res.status(400).json({ message: 'Password should be at least 8 characters long' });
+    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      isActive: true,
+      role: 'user',
+    });
+
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      message: 'User created successfully',
+    });
+
+  } catch (error) {
+    console.error('Registration error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during registration',
+      error: error.message || error,
+    });
+  }
+};
+
 
 export const login = async (req, res, next) => {
     try {
         const { email, password, username } = req.body;
 
-        // Find user by email
-        const user = await User.findOne({$or:[ {email},{username}]});
+        const user = await User.findOne({$or:[ {email},{username}]}).select('+password');
         if (!user) {
             return res.status(401).json({
                 message: 'Invalid credentials'
             });
         }
 
-        // Check if user is active
         if (!user.isActive) {
             return res.status(401).json({
                 message: 'Account is deactivated, contact admin'
             });
         }
-
-        // Validate password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
@@ -79,7 +75,6 @@ export const login = async (req, res, next) => {
                 message: 'Invalid credentials'
             });
         }
-        // Generate JWT token iwth only user id as payload, will use later to get other data, maybe?
         const token = jwt.sign(
             { id: user._id ,
               role:user.role,
@@ -111,10 +106,8 @@ export const changepassword = async (req, res, next) => {
 
         const { username, currentPassword, newPassword } = req.body;
 
-        // Get user with password
         const user = await User.findById(req.user.id).select('+password');
 
-        // Verify current password
         const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!isMatch) {

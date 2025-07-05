@@ -1,37 +1,40 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { connectDB } from "./configs/configs.js";
+import { connectCloudinary, connectDB } from "./configs/configs.js";
 import userRouter from "./routes/userRoutes.js";
 import membersRouter from "./routes/membersRoutes.js";
 import authRouter from "./routes/authRoutes.js";
-import eventRouter from "./routes/eventRoutes.js";
-import resourceRouter from "./routes/resourceRoutes.js";
-import teamRouter from  "./routes/teamRouter.js";
+//import eventRouter from "./routes/eventRoutes.js";
+//import resourceRouter from "./routes/resourceRoutes.js";
+//import teamRouter from  "./routes/teamRoutes.js";
+//import adminRoutes from "./routes/adminRoutes.js"
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
-r
 app.use(express.json());
 app.use(cors());
 
-async () => {
-  try {
+async function connectMongoDb(){
+  try{
     await connectDB();
-    console.log("Mongo connection good");
-  } catch (err) {
-    console.log("error mongo");
-    console.error("Mongo connection bad", err);
+    console.log('connecte to mongoDB');
+  }catch(error){
+    console.error('Failed to connect to mongoDB')
   }
-};
+}
+
+connectMongoDb();
+connectCloudinary();
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
 app.use('/auth', authRouter);
-app.use('/event', eventRouter);
-app.use('/resource',resourceRouter);
-app.use('/team',teamRouter);
+//app.use('/event', eventRouter);
+//app.use('/resource',resourceRouter);
+//app.use('/team',teamRouter);
+//app.use('/admin',adminRoutes);
 
 
 app.get("/", (req, res) => {

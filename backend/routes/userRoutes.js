@@ -24,10 +24,10 @@ router.put('/:id', protect, updateProfile);
 router.get('/team/:id', teamDashboard);
 
 //make changes in their team,
-router.put('/team/:id',updateteam)
+//router.put('/team/:id',updateteam)
 
 // maybe in home route
-router.post('/feedback',feedback)
+//router.post('/feedback',feedback)
 
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
