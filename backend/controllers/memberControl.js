@@ -61,7 +61,7 @@ export const createBlog = async (req, res) => {
       title,
       content,
       description,
-      author: req.user._id,
+      author: req.user.id,
       isPublished: req.body.isPublished || false,
       publishedAt: req.body.isPublished ? new Date() : null,
       images:imagedata,
@@ -83,14 +83,21 @@ export const createBlog = async (req, res) => {
 
 export const getBlogsByUser = async (req, res) => {
   try {
-    const memberId = req.params.id;
-    const blogs = await Blog.find({ author: memberId, isPublished: true }).sort({ publishedAt: -1 }) // latest first
+    const memberid = req.params.id;
+    const userid = req.user.id;
+    if(userid!==memberid){
+    const blogs = await Blog.find({ author: memberId, isPublished: true }).select('Title').sort({ publishedAt: -1 }) // latest first
+  }
+    else if(userid===memberid){
+     const blogs= await Blog.find({author:memberid}).sort({publishedAt:-1}); 
+  }
 
-    res.json({
+
+  res.json({
       success: true,
       data: blogs
     });
-
+    
   } catch (error) {
     console.error('Get blogs error:', error);
     res.status(500).json({

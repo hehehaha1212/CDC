@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import {User,Blog} from "../models/models.js"; 
+import {Blog} from "../models/models.js"; 
 
 export const requireRole = (...roles) => {
 	return (req, res, next) => {
@@ -22,7 +22,7 @@ export const protect = async (req, res, next) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = decoded;
-    	next();
+    	 return next();
 	}
 	catch (err) {
 		return res.status(401).json({ message: 'invalid token' });
@@ -47,10 +47,10 @@ export const blogownership = async (req, res, next) => {
 	  return res.status(404).json({ message: "Blog not found" });
 	}
 
-	if (blog.author.toString() !== req._id.toString()) {
+	if (blog.author() !== req.user.id) {
 	  return res.status(403).json({ message: "Not authorized" });
 	}
-	next();
+	 return next();
      }catch (error) {
 	return res.status(500).json({ message: "Server error" });
   }
