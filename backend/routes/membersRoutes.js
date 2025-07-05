@@ -1,26 +1,28 @@
 import express from 'express';
 import { blogownership, protect } from '../middleware/auth.js';
 import {
+  getMember,
+  listMembers,
+  getBlog,
   createBlog,
   updateBlog,
   deleteBlog,
-} from '../controllers/blogControl.js';
+} from '../controllers/memberControl.js';
 
 const router = express.Router();
 
-
-router.get('/', (req, res) => {
-  res.send('blog base route working');
-});
+//ge all member
+router.get('/', listMembers);
 
 //get member data and their blogs, maybe break these into two
 router.get('/:memberID',getMember)
 
-// Create blog (protected)
-router.post('/:memberID', protect, createBlog);
 
 // Get blog by user (public)
 router.get('/:memberID/:blogID', getBlog);
+
+// Create blog (protected)
+router.post('/:memberID', protect, createBlog);
 
 // Update blog (protected, ownership)
 router.put('/:memberID/:blogID', protect, blogownership, updateBlog);

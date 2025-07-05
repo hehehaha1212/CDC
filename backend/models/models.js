@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-export const User = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username:       { type: String, required: true },
   email:          { type: String, unique: true, required: true },
   password:       { type: String, required: true },
-  phone:          { type: Number, unique: true },
+  phone:          { type: Number, unique: true, sparse: true },
   college:        { type: String },
-  rollno:         { type: Number, unique: true },
+  rollno:         { type: Number, unique: true,sparse: true },
   isActive:       { type: Boolean, default: true },
   teadID:         { type: mongoose.Schema.Types.ObjectId},
   role: {
@@ -16,36 +16,41 @@ export const User = new mongoose.Schema({
   },
   eventProfile:    {
     codeforcesId: { type: String, unique: true, sparse: true },
-    eventRole:    { type: String, enum: ["member","leader"], default: "member" }
+    eventRole:    { type: String, enum: ["teammember","leader"], default: "teammember" }
   }
 }, {
   timestamps: true
 });
 
-export const Member = new mongoose.Schema ({
+export const User = mongoose.model('User',userSchema);
+
+const memberSchema = new mongoose.Schema ({
   memberName:      { type: String, unique: true, required: true },
-  memberBatch:     { type: Number, required: true },
+  memberYear:      { type: Number, required: true },
   memberImage:     [String],
   memberBio:       { type: String },
   memberRole:      { type: String, required: true },
-  memberSocial: {
+  memberSocial:    {
     linkedin:      [String],
     github:        [String],
     email:         [String]
   },
 });
 
+export const Member = mongoose.model('Member',memberSchema);
+
+
 export const Team = new mongoose.Schema({
   teamName:           { type: String, required: true },
-  maxMembers: { type: Number, default: 3 },
+  maxMembers:         { type: Number, default: 3 },
   event: {
     eventId:          { type: Number, required: true },
     isRegistered:     { type: Boolean, default: false },
     score:            { type: Number, default: 0 }
   },
   members: [{
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User',  required: true },
-    role:   { type: String, enum: ["member", "leader"], default: "member" },
+    userId:   { type: mongoose.Schema.Types.ObjectId, ref: 'User',  required: true },
+    role:     { type: String, enum: ["member", "leader"], default: "member" },
     joinedAt: { type: Date, default: Date.now }
   }],
 }, {
@@ -64,7 +69,7 @@ export const Event = new mongoose.Schema({
 });
 */
 
-export const Feedback = new mongoose.Schema({
+const feedbackSchema = new mongoose.Schema({
   name:    { type: String, required: true },
   email:   { type: String, required: true },
   contact: { type: Number, required: true },
@@ -73,14 +78,19 @@ export const Feedback = new mongoose.Schema({
   timestamps: true
 });
 
-export const Blog = new mongoose.Schema({
+export const Feedback = mongoose.model('Feedback',feedbackSchema); 
+
+const blogSchema = new mongoose.Schema({
   title:       { type: String, required: true },
   content:     { type: String, required: true },
+  description: { type: String, required: true },
   author:      { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
   images:      [String], 
   isPublished: { type: Boolean, default: false },
   publishedAt: { type: Date }
 });
+
+export const Blog = mongoose.model('Blog',blogSchema)
 
 /*roadmap{
   domain_name: string

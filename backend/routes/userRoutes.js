@@ -15,19 +15,19 @@ router.get('/', (req, res) => {
 });
 
 // Get user profile/dashboard
-router.get('/:id', userDashboard);
+router.get('/dashboard', protect, userDashboard);
 
 // Update user profile
-router.put('/:id', protect, updateProfile);
+router.put('/dashboard', protect, updateProfile);
 
 // Get  their current team data
 router.get('/team/:id', teamDashboard);
 
 //make changes in their team,
-router.put('/team/:id',updateteam)
+//router.put('/team/:id',updateteam)
 
 // maybe in home route
-router.post('/feedback',feedback)
+//router.post('/feedback',feedback)
 
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
