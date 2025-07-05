@@ -86,7 +86,7 @@ export const getBlogsByUser = async (req, res) => {
     const memberid = req.params.id;
     const userid = req.user.id;
     if(userid!==memberid){
-    const blogs = await Blog.find({ author: memberId, isPublished: true }).select('Title').sort({ publishedAt: -1 }) // latest first
+    const blogs = await Blog.find({ author: memberid, isPublished: true }).select('Title').sort({ publishedAt: -1 }) // latest first
   }
     else if(userid===memberid){
      const blogs= await Blog.find({author:memberid}).sort({publishedAt:-1}); 
@@ -141,12 +141,13 @@ export const updateBlog = async (req, res) => {
       blog.isPublished = IsPublished;
       if (IsPublished && !blog.publishedAt) {
         blog.publishedAt = new Date();
-        } 
+        }
     }
     if(Image){
-      const imageurl= await uploadToCloudinary(image,"Blogs")
-      imagedata=imageurl;
+      const imageurl= await uploadToCloudinary(Image,"Blogs")
+      blog.images=imageurl
     };
+
     await blog.save();
 
     res.json({ success: true, message: 'Blog updated successfully', data: blog });

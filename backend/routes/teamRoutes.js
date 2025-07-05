@@ -2,7 +2,7 @@ import express from 'express'
 import { protect, requireRole} from '../middleware/auth'
 import { teamDashboard } from '../controllers/userControl';
 //import node mailer, to send mails 
-const router = express.Router;
+const router = express.Router();
 
 
 router.post('/',protect,requireRole(leader), createTeam);

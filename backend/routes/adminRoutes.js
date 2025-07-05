@@ -2,7 +2,7 @@ import express from 'express'
 import { protect, requireRole } from '../middleware/auth.js';
 
 
-const router = express.Router;
+const router = express.Router();
 
 //const sendPaymentAcceptedMail=(email,username)=>{}
 

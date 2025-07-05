@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { connectCloudinary, connectDB } from "./configs/configs.js";
 import userRouter from "./routes/userRoutes.js";
 import membersRouter from "./routes/membersRoutes.js";
@@ -12,9 +13,10 @@ import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4200;
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
 async function connectMongoDb(){
   try{
@@ -28,6 +30,10 @@ async function connectMongoDb(){
 connectMongoDb();
 connectCloudinary();
 
+app.get("/", (req, res) => {
+  res.send("API working");
+});
+
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
 app.use('/auth', authRouter);
@@ -35,11 +41,6 @@ app.use('/auth', authRouter);
 //app.use('/resource',resourceRouter);
 //app.use('/team',teamRouter);
 //app.use('/admin',adminRoutes);
-
-
-app.get("/", (req, res) => {
-  res.send("API working");
-});
 
 //listens to port for req 
 app.listen(port, () => {

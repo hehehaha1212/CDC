@@ -4,9 +4,9 @@ const userSchema = new mongoose.Schema({
   username:       { type: String, required: true },
   email:          { type: String, unique: true, required: true },
   password:       { type: String, required: true },
-  phone:          { type: Number, unique: true },
+  phone:          { type: Number, unique: true, sparse: true },
   college:        { type: String },
-  rollno:         { type: Number, unique: true },
+  rollno:         { type: Number, unique: true,sparse: true },
   isActive:       { type: Boolean, default: true },
   teadID:         { type: mongoose.Schema.Types.ObjectId},
   role: {
@@ -39,9 +39,10 @@ const memberSchema = new mongoose.Schema ({
 
 export const Member = mongoose.model('Member',memberSchema);
 
+
 export const Team = new mongoose.Schema({
   teamName:           { type: String, required: true },
-  maxMembers: { type: Number, default: 3 },
+  maxMembers:         { type: Number, default: 3 },
   event: {
     eventId:          { type: Number, required: true },
     isRegistered:     { type: Boolean, default: false },

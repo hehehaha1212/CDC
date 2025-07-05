@@ -10,27 +10,22 @@ export const requireRole = (...roles) => {
 	};
 };
 
-export const protect = async (req, res, next) => {
-	let token;
-	if (req.headers.authorization && req.headers.authorization.startWith('bearer')) {
-		token = req.headers.authorization.split(' ')[1];
-	}
-	if (!token) {
-		return res.status(401).json({ message: 'not authorized' });
-	}
-
-	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		req.user = decoded;
-    	 return next();
-	}
-	catch (err) {
-		return res.status(401).json({ message: 'invalid token' });
-	}
+export const protect = (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.sendStatus(403);
+  }
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET); 
+    req.user = data; 
+    return next();
+  } catch {
+    return res.sendStatus(403);
+  } 
 };
 
 /* used to input validation
-export const validate = (req, res, next , error)=>{
+export const validate = (rNot authorizedeq, res, next , error)=>{
 	if(!error.isEmpty()){
 		return res.status(400).json({errors:error.array()});
 	}
@@ -46,9 +41,8 @@ export const blogownership = async (req, res, next) => {
 	if (!blog) {
 	  return res.status(404).json({ message: "Blog not found" });
 	}
-
 	if (blog.author() !== req.user.id) {
-	  return res.status(403).json({ message: "Not authorized" });
+	  return res.status(403).json({ message: "not blog owner" });
 	}
 	 return next();
      }catch (error) {

@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {User} from '../models/models.js';
+import cookieParser from "cookie-parser";
 
 export const register = async (req, res) => {
   try {
@@ -62,7 +63,6 @@ export const login = async (req, res, next) => {
                 message: 'Invalid credentials'
             });
         }
-
         if (!user.isActive) {
             return res.status(401).json({
                 message: 'Account is deactivated, contact admin'
@@ -82,10 +82,14 @@ export const login = async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: '10d' }
         );
-        res.json({
+        res.cookie("access_token", token, {
+            httpOnly: true,                   
+            secure: false,                   
+            sameSite: "lax",              
+            maxAge: 1000 * 60 * 60 * 24 * 2,
+        }).json({
             success: true,
             message: 'Login successful',
-            token,
             user: {
                 id: user._id,
                 username: user.username,
@@ -103,16 +107,21 @@ export const login = async (req, res, next) => {
 
 export const changepassword = async (req, res, next) => {
     try {
-
-        const { username, currentPassword, newPassword } = req.body;
-
+        const { email, currentPassword, newPassword } = req.body;
         const user = await User.findById(req.user.id).select('+password');
+
+        if(email!==user.email){
+            return res.status(400).json({
+                status:fail,
+                message:'invalid creds1'
+            })
+        }
 
         const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!isMatch) {
             return res.status(400).json({
-                message: 'invalid creds'
+                message: 'invalid creds2'
             });
         }
         

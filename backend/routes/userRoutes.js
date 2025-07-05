@@ -15,10 +15,10 @@ router.get('/', (req, res) => {
 });
 
 // Get user profile/dashboard
-router.get('/:id', userDashboard);
+router.get('/dashboard', protect, userDashboard);
 
 // Update user profile
-router.put('/:id', protect, updateProfile);
+router.put('/dashboard', protect, updateProfile);
 
 // Get  their current team data
 router.get('/team/:id', teamDashboard);

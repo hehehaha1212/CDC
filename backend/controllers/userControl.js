@@ -23,29 +23,23 @@ export const getAllMember = async (req, res) => {
   }
 };
 
-export const getUserProfile = async(req,res)=>{
-	try{
-	const user= await usermodel.findById(req.params.id).select('-password');
-	const blogs = await blogmodel.find({
-		author:req.params.id,
-		isPublised:true
-		}).sort({publishedAt:-1});
+export const getUserDashboard = async (req, res) => {
+  try {
+    const user = await usermodel.findById(req.user.id).select('-password');
 
-	res.json({
-		body:user.blogs
-	});
-	} catch(error){
-	res.status(500).json({message:'server error'})
-	}
+    res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 };
-
 //upload profile
 export const updateProfile = async (req, res) => {
 	try {
-
-	  const { id } = req.params;
-	  // Check if user is updating their own profile
-	  if (req.user._id !== id) {
+	  const id = req.params.id;
+	  if (req.user.id !== id) {
 		return res.status(403).json({
 		  success: false,
 		  message: 'Not authorized to update this profile'
@@ -98,7 +92,7 @@ export const updateProfile = async (req, res) => {
 	  });
 	}
   };
-
+/*
   //upload profile pic
   export const uploadProfileImage = async (req, res) => {
 	try {
@@ -159,7 +153,7 @@ export const updateProfile = async (req, res) => {
 	  });
 	}
   }
-
+*/
   //get blogs by user
   export const getUserBlogs = async (req, res) => {
 	try {
@@ -271,7 +265,7 @@ export const teamDashboard = async (req, res) => {
 // User dashboard
 export const userDashboard = async (req, res) => {
   try {
-    const profile = await User.findById(req.params.id).select('-password');
+    const profile = await User.findById(req.user.id).select('-password');
     if (!profile) {
       return res.status(404).json({ message: 'error getting user data' });
     }
