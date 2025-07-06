@@ -11,12 +11,11 @@ import {
 
 const router = express.Router();
 
-//ge all member
+//get all member all member of that year
 router.get('/', listMembers);
 
 //get member data and their blogs, maybe break these into two
 router.get('/:memberID',getMember)
-
 
 // Get blog by user (public)
 router.get('/:memberID/:blogID', getBlog);

@@ -1,16 +1,6 @@
-/*
-get all members
-get user profile
-update profile
-upload profile image??
-get all blogs 
-delete user
-teamdashboard
-userdashboard
-verify for membership
-*/
-import { User, Blog, Team } from '../models/models.js';
-
+import { Team } from '../models/team.js';
+import { User } from '../models/user.js';
+import { Blog } from '../models/blog.js';
 // Get all members
 export const getAllMember = async (req, res) => {
   try {

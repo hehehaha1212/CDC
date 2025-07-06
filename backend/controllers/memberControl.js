@@ -1,11 +1,8 @@
-import  {Blog, Member} from "../models/models.js";
+import  {Blog, Member} from "../models/user.js";
 import { uploadToCloudinary } from "../configs/configs.js";
-
-
 
 export const listMembers = async (req, res) => {
   try {
-
     const { year } = req.query;          
     const query = year ? { year } : {}; 
 
@@ -47,8 +44,15 @@ export const  getMember = async(req,res)=>{
     })};
 };
 
-
 export const createBlog = async (req, res) => {
+  const memberid= req.params.id;
+  const userid= req.user.id;
+  if(memberid!==userid){
+    res.status(400).json({
+      success:true,
+      message:'not authorised'
+    });
+  }
   const {title, content,image, description,}=req.body
   try {
     let imagedata={}
@@ -81,7 +85,7 @@ export const createBlog = async (req, res) => {
 };
 
 
-export const getBlogsByUser = async (req, res) => {
+export const getMemberBlogs = async (req, res) => {
   try {
     const memberid = req.params.id;
     const userid = req.user.id;
