@@ -1,0 +1,36 @@
+import { Feedback } from "../models/models.js";
+
+export const sendFeedback = async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone, content } = req.body;
+        const userId = req.user.id;
+        if (!firstName || !lastName || !email || !phone || !content) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required'
+            });
+        }
+
+        // Create feedback object
+        const feedback = await Feedback.create({
+            firstName,
+            lastName,
+            email,
+            phone,
+            content
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Feedback submitted successfully',
+            data: feedback
+        });
+        
+    } catch (error) {
+        console.error('Feedback submission error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+}

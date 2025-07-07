@@ -6,6 +6,7 @@ import {
   updateProfile,
  // getUserProfile
 } from '../controllers/userControl.js'
+import { sendFeedback }  from '../controllers/feedbackControl.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -31,5 +32,8 @@ router.get('/team/:id', teamDashboard);
 
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
+
+//give feedback
+router.post('/feedback', protect, sendFeedback)
 
 export default router;
