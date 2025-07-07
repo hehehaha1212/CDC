@@ -15,7 +15,7 @@ export const getAllMember = async (req, res) => {
 
 export const getUserDashboard = async (req, res) => {
   try {
-    const user = await usermodel.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password');
 
     res.status(200).json({
       success: true,
