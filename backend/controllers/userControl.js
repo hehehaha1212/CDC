@@ -28,7 +28,7 @@ export const getUserDashboard = async (req, res) => {
 //upload profile
 export const updateProfile = async (req, res) => {
 	try {
-		const id = req.params.id;
+		const id = req.user.id;
 		if (req.user.id !== id) {
 			return res.status(403).json({
 				success: false,

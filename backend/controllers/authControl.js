@@ -7,8 +7,8 @@ import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios'
 
 export const register = async (req, res) => {
-    try {
-        const { username, email, password, phone, rollno  } = req.body;
+  try {
+    const { username, email, password, phone, rollno  } = req.body;
 
         if (!username || username.trim().length < 2 || username.split(' ')[0].length < 2) {
             return res.status(400).json({ message: 'First name should be at least 2 characters long' });

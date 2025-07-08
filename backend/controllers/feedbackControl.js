@@ -1,4 +1,4 @@
-import { Feedback } from "../models/models.js";
+import { Feedback } from "../models/feedback.js";
 
 export const sendFeedback = async (req, res) => {
     try {
@@ -25,7 +25,6 @@ export const sendFeedback = async (req, res) => {
             message: 'Feedback submitted successfully',
             data: feedback
         });
-
     } catch (error) {
         console.error('Feedback submission error:', error);
         res.status(500).json({
@@ -33,4 +32,4 @@ export const sendFeedback = async (req, res) => {
             message: 'Server error'
         });
     }
-} 
+}

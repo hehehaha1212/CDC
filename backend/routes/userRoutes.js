@@ -33,4 +33,7 @@ router.post('/feedback', protect, sendFeedback)
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
 
+//give feedback
+router.post('/feedback', protect, sendFeedback)
+
 export default router;
