@@ -34,7 +34,7 @@ router.get('/login/google', googleLogin);
 //github login signup
 router.post('/auth/github', githubLogin);
 
-router.get('/forget-password',forgetpassword)
+// router.get('/forget-password',forgetpassword)
 
 //change password
 router.put('/change-password', protect, changepassword);

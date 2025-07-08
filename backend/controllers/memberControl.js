@@ -1,4 +1,5 @@
-import  {Blog, Member} from "../models/user.js";
+import  {Blog} from "../models/blog.js";
+import {Member} from "../models/member.js";
 import { uploadToCloudinary } from "../configs/configs.js";
 
 export const listMembers = async (req, res) => {
