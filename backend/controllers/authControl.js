@@ -8,7 +8,7 @@ import axios from 'axios'
 
 export const register = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, phone, rollno  } = req.body;
 
         if (!username || username.trim().length < 2 || username.split(' ')[0].length < 2) {
             return res.status(400).json({ message: 'First name should be at least 2 characters long' });
@@ -32,6 +32,8 @@ export const register = async (req, res) => {
         const user = new User({
             username,
             email,
+            phone,
+            rollno,
             password: hashedPassword,
             isActive: true,
             role: 'user',
@@ -103,7 +105,8 @@ export const login = async (req, res, next) => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({
-            message: 'error during login'
+            message: 'error during login',
+            error: error.message || error,
         });
     }
 };
