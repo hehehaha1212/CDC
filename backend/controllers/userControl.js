@@ -13,18 +13,6 @@ export const getAllMember = async (req, res) => {
 	}
 };
 
-export const getUserDashboard = async (req, res) => {
-	try {
-		const user = await User.findById(req.user.id).select('-password');
-
-		res.status(200).json({
-			success: true,
-			user
-		});
-	} catch (error) {
-		res.status(500).json({ success: false, message: 'Server error' });
-	}
-};
 //upload profile
 export const updateProfile = async (req, res) => {
 	try {
@@ -130,15 +118,16 @@ export const updateProfile = async (req, res) => {
 	}
   }
 */
-//get blogs by user
-export const getUserBlogs = async (req, res) => {
+
+//get blogs status for members only
+export const getBlogsStatus = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const { page = 1, limit = 10, status = 'published' } = req.query;
 
 		let query = { author: id };
 
-		// If user is requesting their own blogs, they can see unpublished ones
+		// If member is requesting their own blogs, they can see unpublished ones
 		if (req.user && req.user.id === id) {
 			if (status === 'all') {
 				// No additional filter
@@ -153,7 +142,7 @@ export const getUserBlogs = async (req, res) => {
 		}
 
 		const blogs = await Blog.find(query)
-			.populate('author', 'username profile.firstName profile.lastName profile.profileImage')
+			.populate('author', 'username firstName lastName profileImage')
 			.sort({ createdAt: -1 })
 			.limit(limit * 1)
 			.skip((page - 1) * limit);
