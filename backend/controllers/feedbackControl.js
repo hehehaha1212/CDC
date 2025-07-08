@@ -25,7 +25,6 @@ export const sendFeedback = async (req, res) => {
             message: 'Feedback submitted successfully',
             data: feedback
         });
-        
     } catch (error) {
         console.error('Feedback submission error:', error);
         res.status(500).json({

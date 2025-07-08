@@ -1,16 +1,6 @@
-/*
-get all members
-get user profile
-update profile
-upload profile image??
-get all blogs 
-delete user
-teamdashboard
-userdashboard
-verify for membership
-*/
-import { User, Blog, Team } from '../models/models.js';
-
+import { Team } from '../models/team.js';
+import { User } from '../models/user.js';
+import { Blog } from '../models/blog.js';
 // Get all members
 export const getAllMember = async (req, res) => {
 	try {
@@ -25,7 +15,7 @@ export const getAllMember = async (req, res) => {
 
 export const getUserDashboard = async (req, res) => {
 	try {
-		const user = await usermodel.findById(req.user.id).select('-password');
+		const user = await User.findById(req.user.id).select('-password');
 
 		res.status(200).json({
 			success: true,
@@ -62,10 +52,8 @@ export const updateProfile = async (req, res) => {
 				user[field] = req.body[field];
 			}
 		});
-
 		user.updatedAt = new Date();
 		await user.save();
-
 		res.json({
 			success: true,
 			message: 'Profile updated successfully',
@@ -196,27 +184,25 @@ export const getUserBlogs = async (req, res) => {
 export const deactivateUser = async (req, res) => {
 	try {
 		const { id } = req.params;
-
 		// Check if user is deleting their own account or is admin
 		if (req.user.id !== id && req.user.role !== 'admin') {
+
 			return res.status(403).json({
 				success: false,
 				message: 'Not authorized to delete this account'
 			});
 		}
-
 		const user = await User.findById(id);
-
 		if (!user) {
 			return res.status(404).json({
 				success: false,
 				message: 'User not found'
 			});
 		}
-
 		// Soft delete - just deactivate
 		user.isActive = false;
 		user.updatedAt = new Date();
+
 		await user.save();
 
 		res.json({

@@ -3,9 +3,12 @@ import { protect } from '../middleware/auth.js'
 import { 
     register,
     changepassword,
-    login } 
+    login, 
+    googleLogin,
+    githubLogin} 
    from '../controllers/authControl.js'
 const router = express.Router();
+
 //for validation
 /*const validate = (req, res, next)=>{
     const error = validationResult(req);
@@ -25,7 +28,13 @@ router.post('/register',  register);
 //user login
 router.post('/login', login);
 
-//router.get('/forget-password',forgetpassword)
+//google login signup
+router.get('/login/google', googleLogin);
+
+//github login signup
+router.post('/auth/github', githubLogin);
+
+router.get('/forget-password',forgetpassword)
 
 //change password
 router.put('/change-password', protect, changepassword);
