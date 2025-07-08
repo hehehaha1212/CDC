@@ -4,9 +4,11 @@ import {
     register,
     changepassword,
     login, 
-    googleLogin} 
+    googleLogin,
+    githubLogin} 
    from '../controllers/authControl.js'
 const router = express.Router();
+
 //for validation
 /*const validate = (req, res, next)=>{
     const error = validationResult(req);
@@ -32,7 +34,7 @@ router.get('/login/google', googleLogin);
 //github login signup
 router.post('/auth/github', githubLogin);
 
-//router.get('/forget-password',forgetpassword)
+router.get('/forget-password',forgetpassword)
 
 //change password
 router.put('/change-password', protect, changepassword);
