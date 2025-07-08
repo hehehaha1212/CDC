@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   college:        { type: String },
   rollno:         { type: Number, unique: true,sparse: true },
   isActive:       { type: Boolean, default: true },
-  teadID:         { type: mongoose.Schema.Types.ObjectId},
+  teamID:         { type: mongoose.Schema.Types.ObjectId},
   role: {
     type: String,
     enum: ["user", "admin", "member"],
