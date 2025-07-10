@@ -10,6 +10,7 @@ import authRouter from "./routes/authRoutes.js";
 //import resourceRouter from "./routes/resourceRoutes.js";
 //import teamRouter from  "./routes/teamRoutes.js";
 //import adminRoutes from "./routes/adminRoutes.js"
+import firebaseAuthRouter from "./routes/firebaseAuthRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ const port = process.env.PORT || 4200;
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+app.use('/firebase-auth', firebaseAuthRouter);
 
 async function connectMongoDb(){
   try{

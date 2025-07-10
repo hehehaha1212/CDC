@@ -1,12 +1,14 @@
-//configuratuion or setting up the ,mongo, cloudinary,firebase? ,multer 
+//configuratuion or setting up the ,mongo, cloudinary,firebase ,multer 
 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import {v2 as cloudinary} from "cloudinary"
 import multer from "multer";
+import admin from "firebase-admin";
+import { readFileSync } from "fs";
 
 dotenv.config();
-
+//---------------------MONGODB--------------------------
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 export const connectDB = async () => {
   try {
@@ -26,7 +28,7 @@ export const connectDB = async () => {
   }
 };
 
-//cloudinary for image uploads
+//------------------cloudinary for image uploads-------------------
 export const connectCloudinary = async () => {
   cloudinary.config({
     cloud_name:process.env.CLOUD_NAME,
@@ -44,12 +46,31 @@ export const uploadToCloudinary = async (Path, folder)=>{
   }
 };
 
-//export const connectFirebase = () => {
-//logic here
-//  console.log("Firebase connection logic goes here");
-//};
+//-------------------------FIREBASE----------------------
+let auth = null;
+try {
+  if (!admin.apps.length) { 
+    const serviceAccount = JSON.parse(
+      readFileSync("./firebaseServiceAccountKey.json")
+    );
 
-//will be used with form input for images and things
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+
+    console.log("Firebase Admin SDK initialized successfully !!");
+  } else {
+    console.log("Firebase Admin SDK already initialized !!");
+  }
+
+  auth = admin.auth();
+} catch (error) {
+  console.error("Failed to initialize Firebase Admin SDK !! :", error.message);
+}
+export { auth };
+
+
+//--------------------MULTER---------------------
 export const upload = multer({
     storage: multer.memoryStorage(),
     limit: { fileSize: 1024 * 1024 * 10 },
