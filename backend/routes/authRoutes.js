@@ -9,15 +9,6 @@ import {
    from '../controllers/authControl.js'
 const router = express.Router();
 
-//for validation
-/*const validate = (req, res, next)=>{
-    const error = validationResult(req);
-    if(!error.isEmpty()){
-        return res.status(400).json({errors:error.array()});
-    }next();
-};*/
-
-
 router.get('/', (req, res) => {
   res.send('auth base route working');
 });
@@ -34,7 +25,7 @@ router.get('/login/google', googleLogin);
 //github login signup
 router.post('/auth/github', githubLogin);
 
-// router.get('/forget-password',forgetpassword)
+//router.get('/forget-password',forgetpassword)
 
 //change password
 router.put('/change-password', protect, changepassword);

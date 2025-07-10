@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
   res.send('Firebase auth base route working');
 });
 
+
 // Main route: receives Firebase ID token from frontend
 // router.post('/verify-token', verifyFirebaseUser);
 
