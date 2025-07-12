@@ -27,13 +27,10 @@ router.get('/team/:id', teamDashboard);
 //make changes in their team,
 //router.put('/team/:id',updateteam)
 
-//give feedback
-router.post('/feedback', protect, sendFeedback)
-
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
 
 //give feedback
-router.post('/feedback', protect, sendFeedback)
+router.post('/feedback', sendFeedback)
 
 export default router;
