@@ -2,9 +2,8 @@ import { Feedback } from "../models/feedback.js";
 
 export const sendFeedback = async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, content } = req.body;
-        const firebaseUID = req.user.uid;
-        if (!firstName || !lastName || !email || !phone || !content) {
+        const { firstName, lastName, email, phone, message } = req.body;
+        if (!firstName || !lastName || !email || !phone || !message) {
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required'
@@ -17,7 +16,7 @@ export const sendFeedback = async (req, res) => {
             lastName,
             email,
             phone,
-            content
+            message
         });
 
         res.status(201).json({
