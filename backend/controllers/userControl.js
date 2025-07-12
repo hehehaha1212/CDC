@@ -228,7 +228,8 @@ export const teamDashboard = async (req, res) => {
 // User dashboard
 export const userDashboard = async (req, res) => {
 	try {
-		const profile = await User.findById(req.user.id).select('-password');
+		const firebaseUID = req.user.uid; 
+		const profile = await User.findOne({firebaseUID}).select('-password');
 		if (!profile) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
@@ -243,6 +244,7 @@ export const userDashboard = async (req, res) => {
 			teamname,
 		});
 	} catch (error) {
+		console.error('Error getting user data:', error);
 		res.status(400).json({ message: 'error getting user data' });
 	}
 };

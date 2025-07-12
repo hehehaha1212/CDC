@@ -7,7 +7,7 @@ import {
  // getUserProfile
 } from '../controllers/userControl.js'
 import { sendFeedback }  from '../controllers/feedbackControl.js';
-import { protect } from '../middleware/auth.js';
+import { protect } from '../middleware/firebaseauthmiddleware.js';
 
 const router = express.Router();
 

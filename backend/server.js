@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
-app.use('/auth', authRouter);
+// app.use('/auth', authRouter);
 app.use('/firebase-auth', firebaseAuthRouter);
 //app.use('/event', eventRouter);
 //app.use('/resource',resourceRouter);
