@@ -1,52 +1,54 @@
 import { User } from '../models/user.js';
 import { auth } from '../configs/configs.js'; // firebase-admin auth object
 
-// Register/Login using Firebase Token
-export const verifyFirebaseUser = async (req, res) => {
-  const { firebaseToken } = req.body;
-
-  if (!firebaseToken) {
-    return res.status(400).json({ message: 'Firebase token is required' });
-  }
+export const registerWithFirebase = async (req, res) => {
+  const { firebaseToken, firstName, lastName, phone, college, rollno } = req.body;
+  console.log("Received registration data:", req.body);
+  if (!firebaseToken) return res.status(400).json({ message: "Token required" });
 
   try {
-    // Verify the token with Firebase Admin SDK
-    const decodedUser = await auth.verifyIdToken(firebaseToken);
+    const decoded = await auth.verifyIdToken(firebaseToken);
+    const { email, uid } = decoded;
 
-    const { email, name, uid } = decodedUser;
-
-    // Check if user exists in DB
     let user = await User.findOne({ email });
-
     if (!user) {
-      // Create user in MongoDB if not exists
       user = await User.create({
-        username: name || email.split('@')[0],
-        email,
         firebaseUID: uid,
+        email,
+        firstName,
+        lastName,
+        phone,
+        college,
+        rollno,
+        username: `${firstName} ${lastName}`,
         isActive: true,
         role: 'user',
       });
     }
+    return res.status(201).json({ success: true, user });
 
-    return res.status(200).json({
-      success: true,
-      message: 'User verified successfully',
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-    });
   } catch (error) {
-    console.error('Firebase auth error:', error);
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid or expired Firebase token',
-    });
+    console.error("User creation failed:", error);
+    return res.status(500).json({ message: "User creation failed", error: error.message });
+  }
+
+};
+
+export const loginWithFirebase = async (req, res) => {
+  const { firebaseToken } = req.body;
+  if (!firebaseToken) return res.status(400).json({ message: "Token required" });
+
+  try {
+    const decoded = await auth.verifyIdToken(firebaseToken);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
+
 
 // For testing protected routes
 export const getProfile = async (req, res) => {

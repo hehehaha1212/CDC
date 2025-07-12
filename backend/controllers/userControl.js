@@ -246,3 +246,4 @@ export const userDashboard = async (req, res) => {
 		res.status(400).json({ message: 'error getting user data' });
 	}
 };
+
