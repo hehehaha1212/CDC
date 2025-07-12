@@ -3,7 +3,7 @@ import { Feedback } from "../models/feedback.js";
 export const sendFeedback = async (req, res) => {
     try {
         const { firstName, lastName, email, phone, content } = req.body;
-        const userId = req.user.id;
+        const firebaseUID = req.user.uid;
         if (!firstName || !lastName || !email || !phone || !content) {
             return res.status(400).json({
                 success: false,

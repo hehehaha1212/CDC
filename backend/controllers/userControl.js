@@ -16,16 +16,9 @@ export const getAllMember = async (req, res) => {
 //upload profile
 export const updateProfile = async (req, res) => {
 	try {
-		const id = req.user.id;
-		if (req.user.id !== id) {
-			return res.status(403).json({
-				success: false,
-				message: 'Not authorized to update this profile'
-			});
-		}
+		const firebaseUID = req.user.uid;
 
-		const user = await User.findById(id);
-
+		const user = await User.findOne({ firebaseUID });
 		if (!user) {
 			return res.status(404).json({
 				success: false,
@@ -33,15 +26,16 @@ export const updateProfile = async (req, res) => {
 			});
 		}
 
-		// Update only allowed fields
 		const allowedUpdates = ['phone', 'college', 'rollno'];
 		allowedUpdates.forEach(field => {
 			if (req.body[field] !== undefined) {
 				user[field] = req.body[field];
 			}
 		});
+
 		user.updatedAt = new Date();
 		await user.save();
+
 		res.json({
 			success: true,
 			message: 'Profile updated successfully',
@@ -228,20 +222,22 @@ export const teamDashboard = async (req, res) => {
 // User dashboard
 export const userDashboard = async (req, res) => {
 	try {
-		const firebaseUID = req.user.uid; 
-		const profile = await User.findOne({firebaseUID}).select('-password');
+		const firebaseUID = req.user.uid;
+		const profile = await User.findOne({ firebaseUID }).select('-password');
 		if (!profile) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
-		const { username, email, phone, college, rollno, teamname } = profile;
+		const { firstName, lastName, email, phone, college, rollno, teamname } = profile;
 		res.json({
 			success: true,
-			username,
-			email,
-			phone,
-			college,
-			rollno,
-			teamname,
+			user: {
+				username: firstName + lastName,
+				email,
+				phone,
+				college,
+				rollno,
+				teamname,
+			}
 		});
 	} catch (error) {
 		console.error('Error getting user data:', error);
