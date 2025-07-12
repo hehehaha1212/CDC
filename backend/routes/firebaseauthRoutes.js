@@ -1,9 +1,11 @@
 import express from 'express';
 import { protect } from '../middleware/firebaseauthmiddleware.js';
 import {
-  verifyFirebaseUser,
+  
   getProfile,
-} from '../controllers/firebaseauthControl.js';
+  loginWithFirebase,
+  registerWithFirebase,
+} from '../controllers/firebaseAuthControl.js';
 
 const router = express.Router();
 
@@ -12,9 +14,14 @@ router.get('/', (req, res) => {
 });
 
 // Main route: receives Firebase ID token from frontend
-router.post('/verify-token', verifyFirebaseUser);
+// router.post('/verify-token', verifyFirebaseUser);
 
 // Protected route for user profile
 router.get('/profile', protect, getProfile);
 
-export default router;
+router.post('/register', registerWithFirebase);
+
+router.post('/login', loginWithFirebase)
+
+const firebaseAuthRouter = router;
+export default firebaseAuthRouter;

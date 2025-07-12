@@ -15,10 +15,9 @@ import firebaseAuthRouter from "./routes/firebaseAuthRoutes.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 4200;
+app.use(cors(({ origin: 'http://localhost:5173', credentials: true })));
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
-app.use('/firebase-auth', firebaseAuthRouter);
 
 async function connectMongoDb(){
   try{
@@ -38,7 +37,8 @@ app.get("/", (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
-app.use('/auth', authRouter);
+// app.use('/auth', authRouter);
+app.use('/firebase-auth', firebaseAuthRouter);
 //app.use('/event', eventRouter);
 //app.use('/resource',resourceRouter);
 //app.use('/team',teamRouter);
@@ -50,9 +50,9 @@ app.listen(port, () => {
 });
 
 //is any other route
-app.use('/{*any}', (req,res) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
-});
+// app.use('/{*any}', (req,res) => {
+//   res.status(404).json({
+//     success: false,
+//     message: "Route not found",
+//   });
+// });
