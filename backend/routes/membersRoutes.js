@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', listMembers);
 
 //get member data and their blogs, maybe break these into two
-router.get('/:memberID',getMember)
+router.get('/:id',getMember)
 
 // Get blog by user (public)
 router.get('/:memberID/:blogID', getBlog);

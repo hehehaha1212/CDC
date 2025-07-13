@@ -6,6 +6,8 @@ import {v2 as cloudinary} from "cloudinary"
 import multer from "multer";
 import admin from "firebase-admin";
 import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 dotenv.config();
 //---------------------MONGODB--------------------------
@@ -31,9 +33,9 @@ export const connectDB = async () => {
 //------------------cloudinary for image uploads-------------------
 export const connectCloudinary = async () => {
   cloudinary.config({
-    cloud_name:process.env.CLOUD_NAME,
-    api_key:process.env.API_KEY,
-    api_secret:process.env.API_SECRET
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
   });
 };
 
@@ -49,9 +51,11 @@ export const uploadToCloudinary = async (Path, folder)=>{
 //-------------------------FIREBASE----------------------
 let auth = null;
 try {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   if (!admin.apps.length) { 
     const serviceAccount = JSON.parse(
-      readFileSync("./firebaseServiceAccountKey.json")
+      readFileSync(join(__dirname, "firebaseServiceAccountKey.json"))
     );
 
     admin.initializeApp({

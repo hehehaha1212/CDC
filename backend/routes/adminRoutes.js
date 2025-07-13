@@ -1,6 +1,16 @@
 import express from 'express'
 import { protect, requireRole } from '../middleware/auth.js';
-
+import {
+    getAllTeams,
+    getAllUser,
+    createUser,
+    deleteUser,
+    getUserPofile,
+    getTeam,
+    updateTeam,
+    deleteTeam,
+    addmember
+} from "../controllers/adminControl.js"
 
 const router = express.Router();
 
@@ -8,6 +18,11 @@ const router = express.Router();
 
 //router.get('/profile',getAdminprofile); show admin(self) profile
 //router.put('/profile',getAdminprofile); update admin(self) profile
+
+
+router.get('/', (req, res) => {
+  res.send('admin base route working');
+});
 
 
 router.get('/users', protect, requireRole('admin'), getAllUser);
@@ -26,4 +41,8 @@ router.put('/teams/:teamID',  requireRole('admin'),updateTeam);
 
 router.delete('/teams/:teamID', requireRole('admin'),deleteTeam);
 
-router.put('/teams/:teamID/payment', requireRole('admin'), updatePaymentStatus);
+//router.put('/teams/:teamID/payment', requireRole('admin'), updatePaymentStatus);
+
+router.post('/members', addmember)
+
+export default router;

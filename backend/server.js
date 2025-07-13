@@ -5,12 +5,13 @@ import cookieParser from "cookie-parser";
 import { connectCloudinary, connectDB } from "./configs/configs.js";
 import userRouter from "./routes/userRoutes.js";
 import membersRouter from "./routes/membersRoutes.js";
-import authRouter from "./routes/authRoutes.js";
+import teamRouter from  "./routes/teamRoutes.js";
+
 //import eventRouter from "./routes/eventRoutes.js";
 //import resourceRouter from "./routes/resourceRoutes.js";
 //import teamRouter from  "./routes/teamRoutes.js";
-//import adminRoutes from "./routes/adminRoutes.js"
-import firebaseAuthRouter from "./routes/firebaseAuthRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js"
+import firebaseAuthRouter from "./routes/firebaseauthRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -19,11 +20,11 @@ app.use(cors(({ origin: 'http://localhost:5173', credentials: true })));
 app.use(express.json());
 app.use(cookieParser());
 
-async function connectMongoDb(){
-  try{
+async function connectMongoDb() {
+  try {
     await connectDB();
     console.log('connecte to mongoDB');
-  }catch(error){
+  } catch (error) {
     console.error('Failed to connect to mongoDB')
   }
 }
@@ -37,12 +38,12 @@ app.get("/", (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
-// app.use('/auth', authRouter);
 app.use('/firebase-auth', firebaseAuthRouter);
 //app.use('/event', eventRouter);
 //app.use('/resource',resourceRouter);
 //app.use('/team',teamRouter);
-//app.use('/admin',adminRoutes);
+app.use('/admin',adminRoutes);
+app.use('/team',teamRouter);
 
 //listens to port for req 
 app.listen(port, () => {
@@ -50,9 +51,9 @@ app.listen(port, () => {
 });
 
 //is any other route
-// app.use('/{*any}', (req,res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: "Route not found",
-//   });
-// });
+//app.use('/{*any}', (req, res) => {
+//  res.status(404).json({
+//    success: false,
+ //   message: "Route not found",
+//  });
+//});

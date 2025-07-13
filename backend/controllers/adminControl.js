@@ -1,8 +1,9 @@
 import { User } from '../models/user.js'
 import { Team } from '../models/team.js';
+import { Member } from '../models/member.js';
 
 
-export const getAllUsers = async (req, res) => {
+export const getAllUser = async (req, res) => {
     try {
         const users = await User.find().populate('teamId', 'name ranking');
         res.status(200).json(users);
@@ -141,5 +142,43 @@ export const updatePaymentStatus = async (req, res) => {
     res.status(200).json({ success: true, team });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const addmember = async (req, res) => {
+  try {
+    const member = req.body;
+
+    const foundone = await Member.findOne({ 
+      email: member.email, 
+      memberName: member.memberName 
+    });
+
+    if (foundone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Member already exists'
+      });
+    }
+
+    const newmember = new Member({
+      memberName: member.memberName,
+      memberEmail: member.memberEmail,
+      memberRole: member.memberRole,
+      memberYear: member.memberYear,
+
+    });
+
+    await newmember.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Member added successfully',
+      data: newmember
+    });
+
+  } catch (error) {
+    console.error('Create member error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
