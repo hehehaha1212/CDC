@@ -4,7 +4,7 @@ import {
   registerWithFirebase,
   loginWithFirebase,
   getProfile,
-} from '../controllers/firebaseAuthControl.js';
+} from '../controllers/firebaseauthControl.js'
 
 const router = express.Router();
 

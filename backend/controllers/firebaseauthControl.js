@@ -1,5 +1,6 @@
 import { User } from '../models/user.js';
-import { auth } from '../configs/configs.js'; 
+import { auth } from '../configs/configs.js';
+import { Member } from '../models/member.js';
 
 export const registerWithFirebase = async (req, res) => {
   const { firebaseToken, firstName, lastName, college, rollno } = req.body;
@@ -11,6 +12,9 @@ export const registerWithFirebase = async (req, res) => {
     const { email, uid } = decoded;
 
     let user = await User.findOne({ email });
+    const memberEmail = email;
+    let member = await Member.findOne({ memberEmail })
+    const role = (member) ? "member" : "user";
     if (!user) {
       user = await User.create({
         firebaseUID: uid,
@@ -21,14 +25,18 @@ export const registerWithFirebase = async (req, res) => {
         rollno,
         username: `${firstName} ${lastName}`,
         isActive: true,
-        role: 'user',
+        role
       });
     }
-    return res.status(201).json({ success: true, user });
+    else {
+      return res.status(500).json({ message: "User alredy exists", success: false, user });
+    }
+
+    return res.status(201).json({ message: "User registred", success: true, user });
 
   } catch (error) {
     console.error("User creation failed:", error);
-    return res.status(500).json({ message: "User creation failed", error: error.message });
+    return res.status(500).json({ success: false, message: "User creation failed", error: error.message });
   }
 
 };

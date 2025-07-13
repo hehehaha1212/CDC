@@ -4,13 +4,9 @@ import { uploadToCloudinary } from "../configs/configs.js";
 
 export const listMembers = async (req, res) => {
   try {
-    const { year } = req.params;
-    console.log(`Received year: ${year}`);
+    const { year } = req.query;
+    const query = year ? { memberYear: parseInt(year) } : {memberYear:2025};
 
-    const query = year ? { memberYear: year } : {};
-    
-    console.log('Query object:', query); 
-    
     const members = await Member.find(query);
     return res.status(200).json({
       success: true,
@@ -25,13 +21,14 @@ export const listMembers = async (req, res) => {
     });
   }
 };
+
 export const addmember = async (req, res) => {
   try {
     const member = req.body;
 
-    const foundone = await Member.findOne({ 
-      email: member.email, 
-      memberName: member.memberName 
+    const foundone = await Member.findOne({
+      email: member.email,
+      memberName: member.memberName
     });
 
     if (foundone) {
@@ -63,11 +60,9 @@ export const addmember = async (req, res) => {
   }
 };
 
-
 export const getMember = async (req, res) => {
   try {
-    const id = req.params(id);
-    const member = Member.findById(id);
+    const member = await Member.findById(req.params.id);
 
     if (!member) {
       res.status(404).json({
@@ -76,10 +71,9 @@ export const getMember = async (req, res) => {
       })
     };
 
-    return res.status(200).json({
+    res.json({
       success: true,
-      message: '',
-      body: member,
+      body: member
     });
   } catch (error) {
     res.status(404).json({
