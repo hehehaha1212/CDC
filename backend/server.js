@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import { connectCloudinary, connectDB } from "./configs/configs.js";
 import userRouter from "./routes/userRoutes.js";
 import membersRouter from "./routes/membersRoutes.js";
+import teamRouter from  "./routes/teamRoutes.js";
+
 //import eventRouter from "./routes/eventRoutes.js";
 //import resourceRouter from "./routes/resourceRoutes.js";
 //import teamRouter from  "./routes/teamRoutes.js";
@@ -41,6 +43,7 @@ app.use('/firebase-auth', firebaseAuthRouter);
 //app.use('/resource',resourceRouter);
 //app.use('/team',teamRouter);
 app.use('/admin',adminRoutes);
+app.use('/team',teamRouter);
 
 //listens to port for req 
 app.listen(port, () => {
