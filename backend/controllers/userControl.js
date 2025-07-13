@@ -166,16 +166,17 @@ export const getBlogsStatus = async (req, res) => {
 //deletes user data
 export const deactivateUser = async (req, res) => {
 	try {
+		const firebaseUID = req.user.uid;
 		const { id } = req.params;
 		// Check if user is deleting their own account or is admin
-		if (req.user.id !== id && req.user.role !== 'admin') {
+		if (firebaseUID !== id && req.user.role !== 'admin') {
 
 			return res.status(403).json({
 				success: false,
 				message: 'Not authorized to delete this account'
 			});
 		}
-		const user = await User.findById(id);
+		const user = await User.findOne({ firebaseUID });
 		if (!user) {
 			return res.status(404).json({
 				success: false,

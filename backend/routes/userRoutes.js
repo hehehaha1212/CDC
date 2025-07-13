@@ -28,7 +28,7 @@ router.get('/team/:id', teamDashboard);
 //router.put('/team/:id',updateteam)
 
 //deactivate account
-router.delete('/:id', protect, deactivateUser)
+router.delete('/:uid', protect, deactivateUser)
 
 //give feedback
 router.post('/feedback', sendFeedback)
