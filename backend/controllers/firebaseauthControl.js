@@ -1,8 +1,8 @@
 import { User } from '../models/user.js';
-import { auth } from '../configs/configs.js'; // firebase-admin auth object
+import { auth } from '../configs/configs.js'; 
 
 export const registerWithFirebase = async (req, res) => {
-  const { firebaseToken, firstName, lastName, phone, college, rollno } = req.body;
+  const { firebaseToken, firstName, lastName, college, rollno } = req.body;
   console.log("Received registration data:", req.body);
   if (!firebaseToken) return res.status(400).json({ message: "Token required" });
 
@@ -17,7 +17,6 @@ export const registerWithFirebase = async (req, res) => {
         email,
         firstName,
         lastName,
-        phone,
         college,
         rollno,
         username: `${firstName} ${lastName}`,

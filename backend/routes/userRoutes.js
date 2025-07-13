@@ -4,7 +4,6 @@ import {
   teamDashboard,
   userDashboard,
   updateProfile,
- // getUserProfile
 } from '../controllers/userControl.js'
 import { sendFeedback }  from '../controllers/feedbackControl.js';
 import { protect } from '../middleware/firebaseauthmiddleware.js';
@@ -30,7 +29,5 @@ router.get('/team/:id', teamDashboard);
 //deactivate account
 router.delete('/:id', protect, deactivateUser)
 
-//give feedback
-router.post('/feedback', sendFeedback)
 
 export default router;

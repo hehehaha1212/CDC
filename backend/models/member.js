@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
 const memberSchema = new mongoose.Schema ({
-  memberName:      { type: String, unique: true, required: true },
-  memberYear:      { type: Number, required: true },
-  memberImage:     [String],
+  memberName:      { type: String },
+  memberEmail:     { type: String, },
+  memberYear:      { type: Number,},
+  memberImage:     [ String],
   memberBio:       { type: String },
-  memberRole:      { type: String, required: true },
+  memberRole:      { type: String,  },
   memberSocial:    {
     linkedin:      [String],
-    github:        [String],
-    email:         [String]
+    github:        [String]
   },
 });
 

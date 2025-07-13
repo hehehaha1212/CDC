@@ -9,7 +9,6 @@ export const sendFeedback = async (req, res) => {
                 message: 'All fields are required'
             });
         }
-
         // Create feedback object
         const feedback = await Feedback.create({
             firstName,

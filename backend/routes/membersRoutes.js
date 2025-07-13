@@ -11,8 +11,12 @@ import {
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.send('members base route working');
+});
+
 //get all member all member of that year
-router.get('/', listMembers);
+router.get('/:year', listMembers);
 
 //get member data and their blogs, maybe break these into two
 router.get('/:memberID',getMember)
