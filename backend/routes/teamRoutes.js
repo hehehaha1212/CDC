@@ -1,17 +1,14 @@
-import express from 'express'
-import { protect, requireRole} from '../middleware/auth'
-import { teamDashboard } from '../controllers/userControl';
-//import node mailer, to send mails 
-const router = express.Router();
+import {Router} from 'express';
+import {protect} from "../middleware/auth";
+import{teamNameRegistration,getForm,addMembers,teamInfo,updateMembers, teamDetails} from '../controllers/eventControls';
+const roleMiddleware = require('../middleware/role');
 
-router.get('/',protect, teamDashboard);
+const router=Router();
+router.get("/register",protect,getForm);
+router.post("/crateTeam",protect,roleMiddleware,teamNameRegistration); 
+router.post('/addMembers', authMiddleware, roleMiddleware('Team Leader'),addMembers);
+router.put('/:teamId', authMiddleware, roleMiddleware('Team Leader'), teamInfo);
+router.put('/members/:memberId', authMiddleware, roleMiddleware('Team Leader'),updateMembers);
+router.get('/:teamId', authMiddleware, teamDetails);
 
-router.post('/createTeam',protect,requireRole(leader), createTeam);
-
-router.post('/addmember',protect,requireRole(leader),addMember);
-
-router.put('/:teamID',protect,requireRole(leader), changeName);
-
-router.put('/:teamID/:memberID',protect,requireRole(leader),updateMember);
-
-router.get('/:teamID',protect, getTeamData);
+export default router;
