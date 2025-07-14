@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import {Blog} from "../models/blog.js"; 
+import { User } from "../models/user.js";
 
 export const requireRole = (...roles) => {
 	return (req, res, next) => {
@@ -9,6 +10,15 @@ export const requireRole = (...roles) => {
 		next();
 	};
 };
+
+export const requireEventRole = (...roles)=>{
+	return (req,res,next)=>{
+		if (!req.User || !roles.includes(req.User.eventProfile.eventRole)) {
+			return res.status(403).json({ message: `Access denied`});
+		}
+		next();
+	}
+}
 
 export const protect = (req, res, next) => {
   const token = req.cookies.access_token;

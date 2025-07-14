@@ -1,14 +1,26 @@
 import {Router} from 'express';
-import {protect} from "../middleware/auth.js";
-import{teamNameRegistration,getForm,teamInfo,updateMembers, teamDetails} from '../controllers/eventControls.js';
-// const roleMiddleware = require('../middleware/role');
+import { protect } from '../middleware/firebaseauthmiddleware.js';
+import { requireEventRole } from '../middleware/auth.js';
+import{teamNameRegistration,getForm,addMember,teamInfo,updateMembers, teamDetails} from '../controllers/eventControls.js';
 
 const router=Router();
+
+//if role team leader, get form to make team
 router.get("/register",protect,getForm);
-// router.post("/crateTeam",protect,roleMiddleware,teamNameRegistration); 
-// router.post('/addMembers', authMiddleware, roleMiddleware('Team Leader'),addMembers);
-// router.put('/:teamId', authMiddleware, roleMiddleware('Team Leader'), teamInfo);
-// router.put('/members/:memberId', authMiddleware, roleMiddleware('Team Leader'),updateMembers);
-// router.get('/:teamId', authMiddleware, teamDetails);
+
+//create team
+router.post("/createTeam",protect,requireEventRole('Team Leader'),teamNameRegistration); 
+
+//add member
+router.post('/addMember', protect, requireEventRole('Team Leader'),addMember);
+
+//update team data
+router.put('/:teamId',protect,requireEventRole('Team Leader'), teamInfo);
+
+//update member data
+router.put('/members/:memberId',protect, requireEventRole('Team Leader'),updateMembers);
+
+//get info for team dashboard
+router.get('/:teamId', protect, teamDetails);
 
 export default router;

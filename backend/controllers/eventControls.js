@@ -53,6 +53,7 @@ export const getForm = async (req, res) => {
 
 // Add members to a team
 export const addMember = async (req, res) => {
+
   try {
     const { teamId, members } = req.body;
 
@@ -187,6 +188,8 @@ export const teamDetails = async(req, res) => {
 
     res.status(200).json({ team });
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(500).json({ message: 'An error occurred', error: err.message });                                                                                                                                                                               
   }
 };
+
+export {teamNameRegistration,getForm,addMember,teamInfo,updateMembers,teamDetails};
