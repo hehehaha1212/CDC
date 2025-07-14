@@ -4,12 +4,12 @@ const memberSchema = new mongoose.Schema ({
   memberName:      { type: String },
   memberEmail:     { type: String, },
   memberYear:      { type: Number,},
-  memberImage:     [ String],
+  memberImage:     { type: String },
   memberBio:       { type: String },
   memberRole:      { type: String,  },
   memberSocial:    {
-    linkedin:      [String],
-    github:        [String]
+    linkedin:      { type: String },
+    github:        { type: String },
   },
 });
 

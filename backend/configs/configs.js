@@ -39,15 +39,29 @@ export const connectCloudinary = async () => {
   });
 };
 
-export const uploadToCloudinary = async (Path, folder)=>{
-  try{
-    const data= await cloudinary.uploader.upload(Path,{folder:folder});
-    return{url:data.secure_url,publicID:data.public_id};
-  }catch(error){
-    console.error("failed to upload",error);
+export const uploadToCloudinary = async (fileData, options = {}) => {
+  try {
+    let uploadOptions = {
+      folder: options.folder || 'uploads',
+      ...options
+    };
+    if (Buffer.isBuffer(fileData)) {
+      const base64String = fileData.toString('base64');
+      const dataUri = `data:image/jpeg;base64,${base64String}`;
+      
+      const data = await cloudinary.uploader.upload(dataUri, uploadOptions);
+      return { url: data.secure_url, publicID: data.public_id };
+    } else if (typeof fileData === 'string') {
+      const data = await cloudinary.uploader.upload(fileData, uploadOptions);
+      return { url: data.secure_url, publicID: data.public_id };
+    } else {
+      throw new Error('Invalid file data type. Expected Buffer or string.');
+    }
+  } catch (error) {
+    console.error("Failed to upload to Cloudinary:", error);
+    throw error;
   }
 };
-
 //-------------------------FIREBASE----------------------
 let auth = null;
 try {
@@ -78,12 +92,5 @@ export { auth };
 export const upload = multer({
     storage: multer.memoryStorage(),
     limit: { fileSize: 1024 * 1024 * 10 },
-    fileFilter: (file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only image files are allowed!'), false);
-        }
-    }
 });
 

@@ -5,7 +5,7 @@ import { uploadToCloudinary } from "../configs/configs.js";
 export const listMembers = async (req, res) => {
   try {
     const { year } = req.query;
-    const query = year ? { memberYear: parseInt(year) } : {memberYear:2025};
+    const query = year ? { memberYear: parseInt(year) } : { memberYear: 2025 };
 
     const members = await Member.find(query);
     return res.status(200).json({
@@ -22,40 +22,57 @@ export const listMembers = async (req, res) => {
   }
 };
 
-export const addmember = async (req, res) => {
+export const updateMember = async (req, res) => {
   try {
-    const member = req.body;
+    const { memberName, memberBio, linkedin, github } = req.body;
 
-    const foundone = await Member.findOne({
-      email: member.email,
-      memberName: member.memberName
+    const cleanMemberName = Array.isArray(memberName) ? memberName[0] : memberName;
+    const cleanMemberBio = Array.isArray(memberBio) ? memberBio[0] : memberBio;
+    const cleanLinkedin = Array.isArray(linkedin) ? linkedin[0] : linkedin;
+    const cleanGithub = Array.isArray(github) ? github[0] : github;
+
+    console.log('Received data:', {
+      memberName: cleanMemberName,
+      memberBio: cleanMemberBio,
+      linkedin: cleanLinkedin,
+      github: cleanGithub,
+      hasFile: !!req.file
     });
 
-    if (foundone) {
-      return res.status(400).json({
-        success: false,
-        message: 'Member already exists'
-      });
+    const member = await Member.findById(req.params.id);
+    if (!member) {
+      return res.status(404).json({ success: false, message: 'Member not found' });
     }
 
-    const newmember = new Member({
-      memberName: member.memberName,
-      email: member.memberemail,
-      memberRole: member.memberRole,
-      year: member.year,
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer, {
+        folder: 'members/avatar',
+        public_id: `avatar_${member._id}`,
+        transformation: [
+          { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+          { quality: 'auto' }
+        ]
+      });
+      console.log('Image uploaded successfully:', uploadResult);
+      member.memberImage = uploadResult.url;
+    }
+    member.memberName = memberName;
+    member.memberBio = memberBio;
+    member.memberSocial.linkedin = linkedin;
+    member.memberSocial.github = github;
 
-    });
+    member.updatedAt = new Date();
 
-    await newmember.save();
+    await member.save();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: 'Member added successfully',
-      data: newmember
+      message: 'Member updated successfully',
+      member,
     });
 
   } catch (error) {
-    console.error('Create member error:', error);
+    console.error('Update member error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -70,7 +87,7 @@ export const getMember = async (req, res) => {
         message: 'count not load member',
       })
     };
-    
+
     const blogs = await Blog.find({
       author: member._id,
       isPublished: true

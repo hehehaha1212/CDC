@@ -7,18 +7,17 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  updateMember
 } from '../controllers/memberControl.js';
+import { upload } from '../configs/configs.js';
 
 const router = express.Router();
 
-//get all member all member of that year
 router.get('/', listMembers);
+ 
+router.get('/:id', getMember); 
 
-//get member data and their blogs, maybe break these into two
-router.get('/:id',getMember)
-
-//update member data in member profile
-router.put('/:id',protect, requireRole(admin,member) ,updateMember)
+router.put('/:id', upload.single('memberImage'), updateMember);
 
 // Get blog by user (public)
 router.get('/:id/:blogID', getBlog);
