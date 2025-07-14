@@ -29,5 +29,7 @@ router.get('/team/:id', teamDashboard);
 //deactivate account
 router.delete('/:uid', protect, deactivateUser)
 
+//feedback or contactus
+router.post('/feedback', sendFeedback);
 
 export default router;

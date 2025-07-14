@@ -3,7 +3,6 @@ import { protect } from '../middleware/firebaseauthmiddleware.js';
 import { requireEventRole } from '../middleware/auth.js';
 import{teamNameRegistration,getForm,addMember,teamInfo,updateMembers, teamDetails} from '../controllers/eventControls.js';
 
-
 const router=Router();
 
 //if role team leader, get form to make team

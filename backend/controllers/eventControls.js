@@ -1,7 +1,9 @@
-import { User } from "../models/user.js";
-import { Team } from "../models/team.js";
+import {Team} from '../models/team.js';
+import {User} from '../models/user.js';
+import {Blog} from '../models/blog.js';
+
 // Create a new team
- async function teamNameRegistration(req, res){
+export const teamNameRegistration = async (req, res) => {
   try {
     const { name } = req.body;
 
@@ -31,7 +33,7 @@ import { Team } from "../models/team.js";
 };
 
 // Get team details for the logged-in user
-async function getForm(req, res){
+export const getForm = async (req, res) => {
   try {
     // Find the team where the logged-in user is a member
     const team = await Team.findOne({ members: req.user.id }).populate(
@@ -50,7 +52,8 @@ async function getForm(req, res){
 };
 
 // Add members to a team
- async function addMember(req, res) {
+export const addMember = async (req, res) => {
+
   try {
     const { teamId, members } = req.body;
 
@@ -105,7 +108,7 @@ async function getForm(req, res){
 };
 
 // Update team details (Team Leader can update the team name)
-async function teamInfo(req, res) {
+export const teamInfo = async (req, res) => {
   try {
     const { name } = req.body;
     const teamId = req.params.teamId;
@@ -135,7 +138,7 @@ async function teamInfo(req, res) {
 };
 
 // Update member details
- async function updateMembers (req, res) {
+export const updateMembers = async (req, res) => {
   try {
     const { name, email, phone, universityRollNo, codeforceHandle } = req.body;
     const memberId = req.params.memberId;
@@ -169,7 +172,7 @@ async function teamInfo(req, res) {
 };
 
 // Fetch team details by teamId
-async function teamDetails(req, res) {
+export const teamDetails = async(req, res) => {
   try {
     const { teamId } = req.params;
 
