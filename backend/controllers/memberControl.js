@@ -70,11 +70,18 @@ export const getMember = async (req, res) => {
         message: 'count not load member',
       })
     };
+    
+    const blogs = await Blog.find({
+      author: member._id,
+      isPublished: true
+    }).sort({ publishedAt: -1 });
 
-    res.json({
+    return res.json({
       success: true,
-      body: member
+      body: member,
+      blogs: blogs
     });
+
   } catch (error) {
     res.status(404).json({
       success: false,

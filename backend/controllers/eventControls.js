@@ -1,5 +1,5 @@
-const Team = require('../models/Team');
-const User = require('../models/user');
+import { User } from "../models/user.js";
+import { Team } from "../models/team.js";
 // Create a new team
  async function teamNameRegistration(req, res){
   try {
@@ -50,7 +50,7 @@ async function getForm(req, res){
 };
 
 // Add members to a team
- async function addMembers(req, res) {
+ async function addMember(req, res) {
   try {
     const { teamId, members } = req.body;
 
@@ -185,8 +185,8 @@ async function teamDetails(req, res) {
 
     res.status(200).json({ team });
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(500).json({ message: 'An error occurred', error: err.message });                                                                                                                                                                               
   }
 };
 
-export {teamNameRegistration,getForm,addMembers,teamInfo,updateMembers,teamDetails};
+export {teamNameRegistration,getForm,addMember,teamInfo,updateMembers,teamDetails};
