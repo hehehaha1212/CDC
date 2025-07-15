@@ -3,7 +3,7 @@ import { auth } from '../configs/configs.js';
 import { Member } from '../models/member.js';
 
 export const registerWithFirebase = async (req, res) => {
-  const { firebaseToken, firstName, lastName, college, rollno } = req.body;
+  const { firebaseToken, phone, firstName, lastName, college, rollno } = req.body;
   console.log("Received registration data:", req.body);
   if (!firebaseToken) return res.status(400).json({ message: "Token required" });
 
@@ -21,6 +21,7 @@ export const registerWithFirebase = async (req, res) => {
         email,
         firstName,
         lastName,
+        phone,
         college,
         rollno,
         username: `${firstName} ${lastName}`,
