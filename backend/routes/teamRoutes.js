@@ -5,11 +5,16 @@ import{teamNameRegistration,getForm,addMember,teamInfo,updateMembers, teamDetail
 
 const router=Router();
 
+router.get('/', (req, res) => {
+  res.send('Team base route working');
+});
+
+
 //if role team leader, get form to make team
 router.get("/register",protect,getForm);
 
 //create team
-router.post("/createTeam",protect,requireEventRole('Team Leader'),teamNameRegistration); 
+router.post("/createTeam",protect,requireEventRole("Team Leader"),teamNameRegistration); 
 
 //add member
 router.post('/addMember', protect, requireEventRole('Team Leader'),addMember);

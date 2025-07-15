@@ -13,43 +13,6 @@ export const getAllMember = async (req, res) => {
 	}
 };
 
-//upload user dashboard
-export const updateDashboard = async (req, res) => {
-	try {
-		const firebaseUID = req.user.uid;
-
-		const user = await User.findOne({ firebaseUID });
-		if (!user) {
-			return res.status(404).json({
-				success: false,
-				message: 'User not found'
-			});
-		}
-
-		const allowedUpdates = ['phone', 'college', 'rollno'];
-		allowedUpdates.forEach(field => {
-			if (req.body[field] !== undefined) {
-				user[field] = req.body[field];
-			}
-		});
-
-		user.updatedAt = new Date();
-		await user.save();
-
-		res.json({
-			success: true,
-			message: 'Profile updated successfully',
-			data: user,
-		});
-
-	} catch (error) {
-		console.error('Update profile error:', error);
-		res.status(500).json({
-			success: false,
-			message: 'Server error'
-		});
-	}
-};
 /*
   //upload profile pic
   export const uploadProfileImage = async (req, res) => {
@@ -254,7 +217,7 @@ export const userProfile = async (req, res) => {
 		if (!profile) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
-		const { firstName, lastName, email, phone, college, rollno, teamname } =  profile;
+		const { firstName, lastName, email, phone, college, rollno, teamname } = profile;
 		res.json({
 			success: true,
 			user: {
@@ -272,3 +235,41 @@ export const userProfile = async (req, res) => {
 	}
 };
 
+
+//update user profile details
+export const updateProfile = async (req, res) => {
+	try {
+		const firebaseUID = req.user.uid;
+
+		const user = await User.findOne({ firebaseUID });
+		if (!user) {
+			return res.status(404).json({
+				success: false,
+				message: 'User not found'
+			});
+		}
+
+		const allowedUpdates = ['phone', 'college', 'rollno'];
+		allowedUpdates.forEach(field => {
+			if (req.body[field] !== undefined) {
+				user[field] = req.body[field];
+			}
+		});
+
+		user.updatedAt = new Date();
+		await user.save();
+
+		res.json({
+			success: true,
+			message: 'Profile updated successfully',
+			data: user,
+		});
+
+	} catch (error) {
+		console.error('Update profile error:', error);
+		res.status(500).json({
+			success: false,
+			message: 'Server error'
+		});
+	}
+};

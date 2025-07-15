@@ -4,7 +4,7 @@ import { User } from "../models/user.js";
 
 export const requireRole = (...roles) => {
 	return (req, res, next) => {
-		if (!req.User || !roles.includes(req.User.role)) {
+		if (!req.user || !roles.includes(req.user.role)) {
 			return res.status(403).json({ message: `Access denied`});
 		}
 		next();
@@ -13,26 +13,26 @@ export const requireRole = (...roles) => {
 
 export const requireEventRole = (...roles)=>{
 	return (req,res,next)=>{
-		if (!req.User || !roles.includes(req.User.eventProfile.eventRole)) {
+		if (!req.user || !roles.includes(req.user.eventProfile.eventRole)) {
 			return res.status(403).json({ message: `Access denied`});
 		}
 		next();
 	}
 }
 
-export const protect = (req, res, next) => {
-  const token = req.cookies.access_token;
-  if (!token) {
-    return res.sendStatus(403);
-  }
-  try {
-    const data = jwt.verify(token, process.env.JWT_SECRET); 
-    req.user = data; 
-    return next();
-  } catch {
-    return res.sendStatus(403);
-  } 
-};
+// export const protect = (req, res, next) => {
+//   const token = req.cookies.access_token;
+//   if (!token) {
+//     return res.sendStatus(403);
+//   }
+//   try {
+//     const data = jwt.verify(token, process.env.JWT_SECRET); 
+//     req.user = data; 
+//     return next();
+//   } catch {
+//     return res.sendStatus(403);
+//   } 
+// };
 
 /* used to input validation
 export const validate = (rNot authorizedeq, res, next , error)=>{
