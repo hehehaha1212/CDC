@@ -1,5 +1,7 @@
 import express from 'express';
-import { blogownership, protect, requireRole } from '../middleware/auth.js';
+import { blogownership, requireRole } from '../middleware/auth.js';
+import { protect } from '../middleware/firebaseauthmiddleware.js';
+
 import {
   getMember,
   listMembers,

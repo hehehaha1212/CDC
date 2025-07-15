@@ -1,6 +1,7 @@
-import {Team} from '../models/team.js';
-import {User} from '../models/user.js';
-import {Blog} from '../models/blog.js';
+import { Team } from '../models/team.js';
+import { User } from '../models/user.js';
+import { Blog } from '../models/blog.js';
+import mongoose from 'mongoose';
 
 // Create a new team
 export const teamNameRegistration = async (req, res) => {
@@ -14,7 +15,7 @@ export const teamNameRegistration = async (req, res) => {
     }
 
     // Check if the leader already has a team
-    const existingTeam = await Team.findOne({ leaderId: req.user.id });
+    const existingTeam = await Team.findOne({ leaderId: req.user.uid });
     if (existingTeam) {
       return res.status(400).json({ message: 'You have already created a team.' });
     }
@@ -24,7 +25,7 @@ export const teamNameRegistration = async (req, res) => {
     await team.save();
 
     // Update the leader's user data with the teamId
-    await User.findByIdAndUpdate(req.user.id, { teamId: team._id });
+    await User.findByIdAndUpdate(req.user.uid, { teamId: team._id });
 
     res.status(201).json({ message: 'Team created successfully', teamId: team._id });
   } catch (err) {
@@ -36,7 +37,7 @@ export const teamNameRegistration = async (req, res) => {
 export const getForm = async (req, res) => {
   try {
     // Find the team where the logged-in user is a member
-    const team = await Team.findOne({ members: req.user.id }).populate(
+    const team = await Team.findOne({ members: req.user.uid }).populate(
       'members',
       'name email phone universityRollNo codeforceHandle'
     );
@@ -62,6 +63,10 @@ export const addMember = async (req, res) => {
     if (!team) {
       return res.status(404).json({ message: 'Team not found' });
     }
+
+    console.log('Leader ID:', team.leaderId.toString());
+    console.log('Logged-in User ID:', req.user.id.toString());
+
     if (!team.leaderId.equals(req.user.id)) {
       return res.status(403).json({ message: 'You are not authorized to update this team.' });
     }
@@ -80,15 +85,15 @@ export const addMember = async (req, res) => {
       // Check if the email corresponds to a registered user
       const user = await User.findOne({ email: member.email });
       if (!user) {
-        return res.status(400).json({ 
-          message: `User with email ${member.email} is not registered in the cdc website. please register the user before adding him as member.` 
+        return res.status(400).json({
+          message: `User with email ${member.email} is not registered in the cdc website. please register the user before adding him as member.`
         });
       }
 
       // Check if the user is already part of a team
       if (user.teamId) {
-        return res.status(400).json({ 
-          message: `User with email ${member.email} is already part of another team.` 
+        return res.status(400).json({
+          message: `User with email ${member.email} is already part of another team.`
         });
       }
 
@@ -172,7 +177,7 @@ export const updateMembers = async (req, res) => {
 };
 
 // Fetch team details by teamId
-export const teamDetails = async(req, res) => {
+export const teamDetails = async (req, res) => {
   try {
     const { teamId } = req.params;
 
@@ -188,7 +193,7 @@ export const teamDetails = async(req, res) => {
 
     res.status(200).json({ team });
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });                                                                                                                                                                               
+    res.status(500).json({ message: 'An error occurred', error: err.message });
   }
 };
 

@@ -3,8 +3,8 @@ import {
   deactivateUser,
   teamDashboard,
   userDashboard,
-  updateDashboard,
-  userProfile
+  userProfile,
+  updateProfile
 } from '../controllers/userControl.js'
 import { sendFeedback }  from '../controllers/feedbackControl.js';
 import { protect } from '../middleware/firebaseauthmiddleware.js';
@@ -18,12 +18,11 @@ router.get('/', (req, res) => {
 // Get user event dashboard
 router.get('/dashboard', protect, userDashboard);
 
-// Update user event dashboard
-router.put('/dashboard', protect, updateDashboard);
+// Update user profile
+router.put('/profile', protect, updateProfile);
 
 //get user profile
 router.get('/profile', protect, userProfile );
-
 
 
 // Get  their current team data
