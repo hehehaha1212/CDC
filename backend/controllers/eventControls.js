@@ -1,7 +1,5 @@
-import { Team } from '../models/team.js';
-import { User } from '../models/user.js';
-import { Blog } from '../models/blog.js';
-import mongoose from 'mongoose';
+import {Team} from '../models/team.js';
+import {User} from '../models/user.js';
 
 // Create a new team
 export const teamNameRegistration = async (req, res) => {
@@ -197,4 +195,3 @@ export const teamDetails = async (req, res) => {
   }
 };
 
-// export {teamNameRegistration,getForm,addMember,teamInfo,updateMembers,teamDetails};

@@ -1,6 +1,7 @@
 import { Blog } from "../models/blog.js";
 import { Member } from "../models/member.js";
 import { uploadToCloudinary } from "../configs/configs.js";
+import { User } from "../models/user.js";
 
 export const listMembers = async (req, res) => {
   try {
@@ -90,8 +91,7 @@ export const getMember = async (req, res) => {
 
     const blogs = await Blog.find({
       author: member._id,
-      isPublished: true
-    }).sort({ publishedAt: -1 });
+    });
 
     return res.json({
       success: true,
@@ -108,32 +108,33 @@ export const getMember = async (req, res) => {
 };
 
 export const createBlog = async (req, res) => {
-  const memberid = req.params.id;
-  const userid = req.user.id;
-  if (memberid !== userid) {
-    res.status(400).json({
-      success: true,
-      message: 'not authorised'
-    });
-  }
-  const { title, content, image, description, } = req.body
+
+  const { title, content, description, } = req.body
   try {
-    let imagedata = {}
-    if (image) {
-      const imageurl = await uploadToCloudinary(image, "Blogs")
-      imagedata = imageurl;
-    };
 
     const blog = new Blog({
       title,
       content,
       description,
-      author: req.user.id,
+      author: req.params.id,
       isPublished: req.body.isPublished || false,
-      publishedAt: req.body.isPublished ? new Date() : null,
-      images: imagedata,
+      publishedAt: new Date(),
     });
 
+     const member =await  Member.findById(req.params.id)
+     blog.authorName = member.memberName;
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer, {
+        folder: 'blog/avatar',
+        public_id: `avatar_${blog._id}`,
+        transformation: [
+          { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+          { quality: 'auto' }
+        ]
+      });
+      blog.images = uploadResult.url
+      console.log('Image uploaded successfully:', uploadResult);
+    }
     await blog.save();
     res.status(201).json({
       success: true,
@@ -153,7 +154,7 @@ export const getMemberBlogs = async (req, res) => {
     const memberid = req.params.id;
     const userid = req.user.id;
     if (userid !== memberid) {
-      const blogs = await Blog.find({ author: memberid, isPublished: true }).select('Title').sort({ publishedAt: -1 }) // latest first
+      const blogs = await Blog.find({ author: memberid, isPublished: true }).select('Title').sort({ publishedAt: -1 }) 
     }
     else if (userid === memberid) {
       const blogs = await Blog.find({ author: memberid }).sort({ publishedAt: -1 });

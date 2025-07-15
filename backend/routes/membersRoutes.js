@@ -22,10 +22,10 @@ router.get('/:id', getMember);
 router.put('/:id', upload.single('memberImage'), updateMember);
 
 // Get blog by user (public)
-router.get('/:id/:blogID', getBlog);
+router.get('/blog/:id', getBlog);
 
 // Create blog (protected)
-router.post('/:id', protect, createBlog);
+router.post('/:id', upload.single('image'), createBlog);
 
 // Update blog (protected, ownership)
 router.put('/:id/:blogID', protect, blogownership, updateBlog);
