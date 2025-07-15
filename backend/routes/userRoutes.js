@@ -3,7 +3,8 @@ import {
   deactivateUser,
   teamDashboard,
   userDashboard,
-  updateProfile,
+  updateDashboard,
+  userProfile
 } from '../controllers/userControl.js'
 import { sendFeedback }  from '../controllers/feedbackControl.js';
 import { protect } from '../middleware/firebaseauthmiddleware.js';
@@ -14,11 +15,16 @@ router.get('/', (req, res) => {
   res.send('User base route working');
 });
 
-// Get user profile/dashboard
+// Get user event dashboard
 router.get('/dashboard', protect, userDashboard);
 
-// Update user profile
-router.put('/dashboard', protect, updateProfile);
+// Update user event dashboard
+router.put('/dashboard', protect, updateDashboard);
+
+//get user profile
+router.get('/profile', protect, userProfile );
+
+
 
 // Get  their current team data
 router.get('/team/:id', teamDashboard);

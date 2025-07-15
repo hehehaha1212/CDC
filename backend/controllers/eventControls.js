@@ -192,4 +192,4 @@ export const teamDetails = async(req, res) => {
   }
 };
 
-export {teamNameRegistration,getForm,addMember,teamInfo,updateMembers,teamDetails};
+// export {teamNameRegistration,getForm,addMember,teamInfo,updateMembers,teamDetails};
