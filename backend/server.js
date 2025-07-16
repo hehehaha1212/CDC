@@ -49,9 +49,7 @@ connectCloudinary();
 app.get("/", (req, res) => {
   res.send("API working");
 });
-app.get("/api/data", (req, res) => {
-  res.json({ message: "Backend connection successful!" });
-});
+
 
 
 app.use('/user', userRouter);
