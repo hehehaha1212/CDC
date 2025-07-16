@@ -24,7 +24,6 @@ router.put('/profile', protect, updateProfile);
 //get user profile
 router.get('/profile', protect, userProfile );
 
-
 // Get  their current team data
 router.get('/team/:id', teamDashboard);
 
@@ -33,6 +32,8 @@ router.get('/team/:id', teamDashboard);
 
 //deactivate account
 router.delete('/:uid', protect, deactivateUser)
+
+router.post('/profile',protect,logOut);
 
 //feedback or contactus
 router.post('/feedback', sendFeedback);

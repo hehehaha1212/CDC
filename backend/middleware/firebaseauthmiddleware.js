@@ -9,7 +9,6 @@ export const protect = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
-
   try {
     const decodedToken = await auth.verifyIdToken(token);
 
@@ -23,9 +22,9 @@ export const protect = async (req, res, next) => {
       id: user._id,
       role: user.role,
       eventProfile: user.eventProfile || {},
-      firebaseUid: decodedToken.uid
+      firebaseUid: decodedToken.uid,
+      role:user.role
     };
-
     next();
 
   } catch (error) {
