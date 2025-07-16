@@ -13,10 +13,10 @@ export const protect = async (req, res, next) => {
   try {
     const decodedToken = await auth.verifyIdToken(token);
 
-    const user = await User.findOne({firebaseUID: decodedToken.uid});
-    
-    if(!user) {
-      return res.status(401).json({message: "User not found in database"});
+    const user = await User.findOne({ firebaseUID: decodedToken.uid });
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found in database" });
     }
 
     req.user = {
