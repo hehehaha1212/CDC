@@ -186,8 +186,8 @@ export const teamDashboard = async (req, res) => {
 // User dashboard
 export const userDashboard = async (req, res) => {
 	try {
-		const firebaseUID = req.user.uid;
-		const dashboard = await User.findOne({ firebaseUID }).select('-password');
+		const firebaseUid = req.user.firebaseUid;
+		const dashboard = await User.findOne({ firebaseUID: firebaseUid }).select('-password');
 		if (!dashboard) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
@@ -212,8 +212,8 @@ export const userDashboard = async (req, res) => {
 //user profile
 export const userProfile = async (req, res) => {
 	try {
-		const firebaseUID = req.user.uid;
-		const profile = await User.findOne({ firebaseUID }).select('-password');
+		const firebaseUid = req.user.firebaseUid;
+		const profile = await User.findOne({ firebaseUID: firebaseUid });
 		if (!profile) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
@@ -239,9 +239,9 @@ export const userProfile = async (req, res) => {
 //update user profile details
 export const updateProfile = async (req, res) => {
 	try {
-		const firebaseUID = req.user.uid;
+		const firebaseUid = req.user.firebaseUid;
 
-		const user = await User.findOne({ firebaseUID });
+		const user = await User.findOne({ firebaseUID: firebaseUid });
 		if (!user) {
 			return res.status(404).json({
 				success: false,
