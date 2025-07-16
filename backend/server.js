@@ -16,7 +16,22 @@ import firebaseAuthRouter from "./routes/firebaseauthRoutes.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 4200;
-app.use(cors(({ origin: 'http://localhost:5173', credentials: true })));
+
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'https://cdc-frontend.vercel.app'  
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 

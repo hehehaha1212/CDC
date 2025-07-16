@@ -108,10 +108,10 @@ export const deactivateUser = async (req, res) => {
 export const teamDashboard = async (req, res) => {
 	try {
 		const user = await User.findById(req.params.id);
-		if (!user || !user.teamID) {
+		if (!user || !user.teamId) {
 			return res.status(404).json({ message: 'User or team not found' });
 		}
-		const team = await Team.findById(user.teamID);
+		const team = await Team.findById(user.teamId);
 		if (!team) {
 			return res.status(404).json({ message: 'Team not found' });
 		}
