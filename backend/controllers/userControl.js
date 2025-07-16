@@ -13,68 +13,6 @@ export const getAllMember = async (req, res) => {
 	}
 };
 
-/*
-  //upload profile pic
-  export const uploadProfileImage = async (req, res) => {
-	try {
-	  const { id } = req.params;
-  
-	  // Check if user is uploading to their own profile
-	  if (req.user.id !== id) {
-		return res.status(403).json({
-		  success: false,
-		  message: 'Not authorized to upload to this profile'
-		});
-	  }
-  
-	  if (!req.file) {
-		return res.status(400).json({
-		  success: false,
-		  message: 'No image file provided'
-		});
-	  }
-  
-	  const user = await User.findById(id);
-  
-	  if (!user) {
-		return res.status(404).json({
-		  success: false,
-		  message: 'User not found'
-		});
-	  }
-  
-	  // Upload to Cloudinary
-	  const imageUrl = await uploadToCloudinary(req.file.buffer, {
-		folder: 'club-members/avatars',
-		public_id: `avatar_${user._id}`,
-		transformation: [
-		  { width: 400, height: 400, crop: 'fill', gravity: 'face' },
-		  { quality: 'auto' }
-		]
-	  });
-  
-	  // Update user profile
-	  user.profile.profileImage = imageUrl;
-	  user.updatedAt = new Date();
-	  await user.save();
-  
-	  res.json({
-		success: true,
-		message: 'Profile picture uploaded successfully',
-		data: {
-		  profileImage: imageUrl
-		}
-	  });
-  
-	} catch (error) {
-	  console.error('Upload avatar error:', error);
-	  res.status(500).json({
-		success: false,
-		message: 'Server error during image upload'
-	  });
-	}
-  }
-*/
 
 //get blogs status for members only
 export const getBlogsStatus = async (req, res) => {
@@ -212,21 +150,23 @@ export const userDashboard = async (req, res) => {
 //user profile
 export const userProfile = async (req, res) => {
 	try {
-		const firebaseUid = req.user.firebaseUid;
-		const profile = await User.findOne({ firebaseUID: firebaseUid });
+		const firebaseUID = req.user.firebaseUid;
+
+		const profile = await User.findOne({ firebaseUID }).select('-password');
 		if (!profile) {
 			return res.status(404).json({ message: 'error getting user data' });
 		}
-		const { firstName, lastName, email, phone, college, rollno, teamname } = profile;
+		const { firstName, lastName, email, phone, college, rollno, teamname ,role} = profile;
 		res.json({
 			success: true,
 			user: {
-				username: firstName + lastName,
+				username: firstName + " " +lastName,
 				email,
 				phone,
 				college,
 				rollno,
 				teamname,
+				role
 			}
 		});
 	} catch (error) {
