@@ -19,7 +19,7 @@ const port = process.env.PORT || 4200;
 
 const allowedOrigins = [
   'http://localhost:5173', 
-  'https://cdc-frontend.vercel.app'  
+  'https://lively-khapse-e8a03b.netlify.app/',
 ];
 
 app.use(cors({
