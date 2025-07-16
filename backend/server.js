@@ -18,8 +18,7 @@ const app = express();
 const port = process.env.PORT || 4200;
 
 const allowedOrigins = [
-  'http://localhost:5173', 
-  'https://cdc-frontend.vercel.app'  
+  'http://localhost:5173',  
 ];
 
 app.use(cors({
@@ -50,6 +49,10 @@ connectCloudinary();
 app.get("/", (req, res) => {
   res.send("API working");
 });
+app.get("/api/data", (req, res) => {
+  res.json({ message: "Backend connection successful!" });
+});
+
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
