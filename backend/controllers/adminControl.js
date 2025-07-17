@@ -16,7 +16,6 @@ export const getAllUser = async (req, res) => {
 export const getAllMember = async (req, res) => {
   try {
     const member = await Member.find()
-    console.log(member)
     res.status(200).json(member);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching members', error: err.message });
@@ -38,14 +37,33 @@ export const getUserPofile = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.userId);
-    res.status(200).json({ message: 'User deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error deleting user', error: err.message });
+    try {
+  const user = await User.findById(req.params.userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
   }
-}
+  await User.findByIdAndDelete(req.params.userId);
+  res.status(200).json({ message: 'User deleted successfully' });
 
+} catch (err) {
+  res.status(500).json({ message: 'Error deleting user', error: err.message });
+}}
+
+export const deleteMember = async (req, res) => {
+  try {
+    const member = await Member.findById(req.params.id);
+
+    if (!member) {
+      return res.status(404).json({ error: "Member not found" });
+    }
+
+    await Member.findByIdAndDelete(req.params.id);
+    return res.status(200).json({ message: "Member deleted successfully" });
+
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to delete member", details: error.message });
+  }
+};
 
 export const createUser = async (req, res) => {
   try {
@@ -158,7 +176,7 @@ export const addmember = async (req, res) => {
     const member = req.body;
 
     const foundone = await Member.findOne({
-      email: member.email,
+      memberEmail: member.memberEmail,
       memberName: member.memberName
     });
 
