@@ -69,7 +69,7 @@ try {
   const __dirname = dirname(__filename);
   if (!admin.apps.length) { 
     const serviceAccount = JSON.parse(
-      readFileSync(join(__dirname, "firebaseServiceAccountKey.json"))
+      readFileSync(join(process.cwd(), "firebaseServiceAccountKey.json"))
     );
 
     admin.initializeApp({
