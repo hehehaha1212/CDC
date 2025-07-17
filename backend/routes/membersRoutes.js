@@ -17,9 +17,9 @@ const router = express.Router();
 
 router.get('/', listMembers);
  
-router.get('/:id', getMember); 
+router.get('/:id',protect,requireRole("member") ,getMember); 
 
-router.put('/:id', upload.single('memberImage'), updateMember);
+router.put('/:id',protect, requireRole("member") ,upload.single('memberImage'), updateMember);
 
 // Get blog by user (public)
 router.get('/blog/:id', getBlog);

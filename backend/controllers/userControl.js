@@ -67,40 +67,26 @@ export const getBlogsStatus = async (req, res) => {
 //deletes user data
 export const deactivateUser = async (req, res) => {
 	try {
-		const firebaseUID = req.user.uid;
-		const { id } = req.params;
-		// Check if user is deleting their own account or is admin
-		if (firebaseUID !== id && req.user.role !== 'admin') {
+		const { firebaseUid, role } = req.user;
+		const { uid } = req.params;
 
-			return res.status(403).json({
-				success: false,
-				message: 'Not authorized to delete this account'
-			});
+		if (uid !== firebaseUid && role !== 'admin') {
+			return res.status(403).json({ success: false, message: 'Unauthorized' });
 		}
-		const user = await User.findOne({ firebaseUID });
+
+		const user = await User.findOne({ firebaseUID: id });
 		if (!user) {
-			return res.status(404).json({
-				success: false,
-				message: 'User not found'
-			});
+			return res.status(404).json({ success: false, message: 'User not found' });
 		}
-		// Soft delete - just deactivate
+
 		user.isActive = false;
 		user.updatedAt = new Date();
-
 		await user.save();
 
-		res.json({
-			success: true,
-			message: 'Account deactivated successfully'
-		});
-
-	} catch (error) {
-		console.error('Delete user error:', error);
-		res.status(500).json({
-			success: false,
-			message: 'Server error'
-		});
+		res.json({ success: true, message: 'Account deactivated' });
+	} catch (err) {
+		console.error('Deactivate Error:', err);
+		res.status(500).json({ success: false, message: 'Internal Server Error' });
 	}
 };
 

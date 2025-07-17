@@ -81,13 +81,13 @@ export const updateMember = async (req, res) => {
 export const getMember = async (req, res) => {
   try {
     const member = await Member.findById(req.params.id);
-
     if (!member) {
       res.status(404).json({
         success: false,
         message: 'count not load member',
       })
     };
+    const owner = (member.memberEmail === req.user.email) ? 1 : 0;
 
     const blogs = await Blog.find({
       author: member._id,
@@ -96,7 +96,8 @@ export const getMember = async (req, res) => {
     return res.json({
       success: true,
       body: member,
-      blogs: blogs
+      blogs: blogs,
+      owner,
     });
 
   } catch (error) {
@@ -121,8 +122,8 @@ export const createBlog = async (req, res) => {
       publishedAt: new Date(),
     });
 
-     const member =await  Member.findById(req.params.id)
-     blog.authorName = member.memberName;
+    const member = await Member.findById(req.params.id)
+    blog.authorName = member.memberName;
     if (req.file) {
       const uploadResult = await uploadToCloudinary(req.file.buffer, {
         folder: 'blog/avatar',
@@ -154,7 +155,7 @@ export const getMemberBlogs = async (req, res) => {
     const memberid = req.params.id;
     const userid = req.user.id;
     if (userid !== memberid) {
-      const blogs = await Blog.find({ author: memberid, isPublished: true }).select('Title').sort({ publishedAt: -1 }) 
+      const blogs = await Blog.find({ author: memberid, isPublished: true }).select('Title').sort({ publishedAt: -1 })
     }
     else if (userid === memberid) {
       const blogs = await Blog.find({ author: memberid }).sort({ publishedAt: -1 });

@@ -33,7 +33,6 @@ router.get('/team/:id', teamDashboard);
 //deactivate account
 router.delete('/:uid', protect, deactivateUser)
 
-// router.post('/profile',protect,logOut);
 
 //feedback or contactus
 router.post('/feedback', sendFeedback);
