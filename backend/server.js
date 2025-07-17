@@ -18,8 +18,8 @@ const app = express();
 const port = process.env.PORT || 4200;
 
 const allowedOrigins = [
-  'http://localhost:5173', 
-  'https://lively-khapse-e8a03b.netlify.app/',
+  'http://localhost:5173',
+  'https://cdcfrontend-chd9nbfjx-akshat-vishnois-projects.vercel.app',  
 ];
 
 app.use(cors({
@@ -50,6 +50,8 @@ connectCloudinary();
 app.get("/", (req, res) => {
   res.send("API working");
 });
+
+
 
 app.use('/user', userRouter);
 app.use('/members', membersRouter);
