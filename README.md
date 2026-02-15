@@ -1,9 +1,8 @@
-# CDC Website – Coders and Developers Club, MMMUT
+# CDC Server (old)
 
-Welcome to the official repository of the **Coders and Developers Club (CDC)** at **Madan Mohan Malaviya University of Technology (MMMUT)**. This website showcases our club’s initiatives, events, projects, and student achievements.
+Welcome to the (un)official repository of the **Coders and Developers Club (CDC)** at **Madan Mohan Malaviya University of Technology (MMMUT)**. This website showcases our club’s initiatives, events, projects, and student achievements.
 
-## Live Website
-(https://cdcmmmut..)  
+## [Live Website](https://cdc.mmmut.org/)
 
 ---
 
